@@ -14,7 +14,308 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          message: string
+          prompt_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          message: string
+          prompt_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          message?: string
+          prompt_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      folders: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          default_model: string
+          default_style: string
+          email: string | null
+          full_name: string | null
+          id: string
+          plan: string
+          theme: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          default_model?: string
+          default_style?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          plan?: string
+          theme?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          default_model?: string
+          default_style?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          plan?: string
+          theme?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      prompt_tests: {
+        Row: {
+          cost: number
+          created_at: string
+          id: string
+          latency_ms: number
+          max_tokens: number
+          model: string
+          prompt_id: string | null
+          prompt_text: string
+          quality_score: number
+          response: string | null
+          temperature: number
+          tokens: number
+          user_id: string
+          variables: Json
+        }
+        Insert: {
+          cost?: number
+          created_at?: string
+          id?: string
+          latency_ms?: number
+          max_tokens?: number
+          model?: string
+          prompt_id?: string | null
+          prompt_text: string
+          quality_score?: number
+          response?: string | null
+          temperature?: number
+          tokens?: number
+          user_id: string
+          variables?: Json
+        }
+        Update: {
+          cost?: number
+          created_at?: string
+          id?: string
+          latency_ms?: number
+          max_tokens?: number
+          model?: string
+          prompt_id?: string | null
+          prompt_text?: string
+          quality_score?: number
+          response?: string | null
+          temperature?: number
+          tokens?: number
+          user_id?: string
+          variables?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompt_tests_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prompt_versions: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          note: string | null
+          prompt_id: string
+          quality_score: number
+          user_id: string
+          version: number
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          prompt_id: string
+          quality_score?: number
+          user_id: string
+          version: number
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          prompt_id?: string
+          quality_score?: number
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompt_versions_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prompts: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          folder_id: string | null
+          id: string
+          idea: string | null
+          is_favorite: boolean
+          model: string
+          quality_score: number
+          score_breakdown: Json
+          style: string
+          suggestions: Json
+          tags: string[]
+          title: string
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          idea?: string | null
+          is_favorite?: boolean
+          model?: string
+          quality_score?: number
+          score_breakdown?: Json
+          style?: string
+          suggestions?: Json
+          tags?: string[]
+          title: string
+          updated_at?: string
+          user_id: string
+          version?: number
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          idea?: string | null
+          is_favorite?: boolean
+          model?: string
+          quality_score?: number
+          score_breakdown?: Json
+          style?: string
+          suggestions?: Json
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompts_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      templates: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          description: string
+          id: string
+          quality_score: number
+          recommended_model: string
+          title: string
+          variables: string[]
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          description: string
+          id?: string
+          quality_score?: number
+          recommended_model?: string
+          title: string
+          variables?: string[]
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          description?: string
+          id?: string
+          quality_score?: number
+          recommended_model?: string
+          title?: string
+          variables?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
