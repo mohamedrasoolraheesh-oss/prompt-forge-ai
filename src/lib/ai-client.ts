@@ -21,7 +21,7 @@ export async function streamAI(
     method: "POST",
     headers: await authHeaders(),
     body: JSON.stringify(body),
-    signal,
+    signal: signal ?? null,
   });
 
   if (!res.ok || !res.body) {
