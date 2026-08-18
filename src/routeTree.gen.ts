@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedPlaygroundRouteImport } from './routes/_authenticated/playground'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
@@ -55,6 +56,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 const AuthenticatedForgeRoute = AuthenticatedForgeRouteImport.update({
   id: '/forge',
   path: '/forge',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOptimizeRoute = AuthenticatedOptimizeRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
   '/templates': typeof AuthenticatedTemplatesRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
   '/templates': typeof AuthenticatedTemplatesRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/forge': typeof AuthenticatedForgeRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
   '/_authenticated/playground': typeof AuthenticatedPlaygroundRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/forge'
+    | '/history'
     | '/optimize'
     | '/playground'
     | '/templates'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/forge'
+    | '/history'
     | '/optimize'
     | '/playground'
     | '/templates'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/dashboard'
     | '/_authenticated/forge'
+    | '/_authenticated/history'
     | '/_authenticated/optimize'
     | '/_authenticated/playground'
     | '/_authenticated/templates'
@@ -240,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedForgeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/optimize': {
       id: '/_authenticated/optimize'
       path: '/optimize'
@@ -288,6 +307,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedForgeRoute: typeof AuthenticatedForgeRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
   AuthenticatedPlaygroundRoute: typeof AuthenticatedPlaygroundRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
@@ -298,6 +318,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedForgeRoute: AuthenticatedForgeRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
   AuthenticatedPlaygroundRoute: AuthenticatedPlaygroundRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
