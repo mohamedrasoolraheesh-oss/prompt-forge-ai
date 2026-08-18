@@ -14,8 +14,17 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
+import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
+import { Route as AuthenticatedPlaygroundRouteImport } from './routes/_authenticated/playground'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
+import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
+import { Route as AuthenticatedLibraryPromptIdRouteImport } from './routes/_authenticated/library.$promptId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,9 +50,44 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedForgeRoute = AuthenticatedForgeRouteImport.update({
+  id: '/forge',
+  path: '/forge',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOptimizeRoute = AuthenticatedOptimizeRouteImport.update({
+  id: '/optimize',
+  path: '/optimize',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPlaygroundRoute = AuthenticatedPlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiAiRoute = ApiAiRouteImport.update({
@@ -51,22 +95,52 @@ const ApiAiRoute = ApiAiRouteImport.update({
   path: '/api/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedLibraryIndexRoute =
+  AuthenticatedLibraryIndexRouteImport.update({
+    id: '/library/',
+    path: '/library/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLibraryPromptIdRoute =
+  AuthenticatedLibraryPromptIdRouteImport.update({
+    id: '/library/$promptId',
+    path: '/library/$promptId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forge': typeof AuthenticatedForgeRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/optimize': typeof AuthenticatedOptimizeRoute
+  '/playground': typeof AuthenticatedPlaygroundRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
+  '/library/': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forge': typeof AuthenticatedForgeRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/optimize': typeof AuthenticatedOptimizeRoute
+  '/playground': typeof AuthenticatedPlaygroundRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
+  '/library': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -75,15 +149,53 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/forge': typeof AuthenticatedForgeRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
+  '/_authenticated/playground': typeof AuthenticatedPlaygroundRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/_authenticated/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
+  '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/forgot-password' | '/login' | '/signup' | '/dashboard' | '/api/ai'
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/analytics'
+    | '/dashboard'
+    | '/forge'
+    | '/history'
+    | '/optimize'
+    | '/playground'
+    | '/settings'
+    | '/templates'
+    | '/api/ai'
+    | '/library/$promptId'
+    | '/library/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/signup' | '/dashboard' | '/api/ai'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/analytics'
+    | '/dashboard'
+    | '/forge'
+    | '/history'
+    | '/optimize'
+    | '/playground'
+    | '/settings'
+    | '/templates'
+    | '/api/ai'
+    | '/library/$promptId'
+    | '/library'
   id:
     | '__root__'
     | '/'
@@ -91,8 +203,17 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/signup'
+    | '/_authenticated/analytics'
     | '/_authenticated/dashboard'
+    | '/_authenticated/forge'
+    | '/_authenticated/history'
+    | '/_authenticated/optimize'
+    | '/_authenticated/playground'
+    | '/_authenticated/settings'
+    | '/_authenticated/templates'
     | '/api/ai'
+    | '/_authenticated/library/$promptId'
+    | '/_authenticated/library/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,11 +262,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/forge': {
+      id: '/_authenticated/forge'
+      path: '/forge'
+      fullPath: '/forge'
+      preLoaderRoute: typeof AuthenticatedForgeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/optimize': {
+      id: '/_authenticated/optimize'
+      path: '/optimize'
+      fullPath: '/optimize'
+      preLoaderRoute: typeof AuthenticatedOptimizeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/playground': {
+      id: '/_authenticated/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof AuthenticatedPlaygroundRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/templates': {
+      id: '/_authenticated/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/ai': {
@@ -155,15 +325,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/library/': {
+      id: '/_authenticated/library/'
+      path: '/library'
+      fullPath: '/library/'
+      preLoaderRoute: typeof AuthenticatedLibraryIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/library/$promptId': {
+      id: '/_authenticated/library/$promptId'
+      path: '/library/$promptId'
+      fullPath: '/library/$promptId'
+      preLoaderRoute: typeof AuthenticatedLibraryPromptIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedForgeRoute: typeof AuthenticatedForgeRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
+  AuthenticatedPlaygroundRoute: typeof AuthenticatedPlaygroundRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
+  AuthenticatedLibraryPromptIdRoute: typeof AuthenticatedLibraryPromptIdRoute
+  AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedForgeRoute: AuthenticatedForgeRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
+  AuthenticatedPlaygroundRoute: AuthenticatedPlaygroundRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
+  AuthenticatedLibraryPromptIdRoute: AuthenticatedLibraryPromptIdRoute,
+  AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
