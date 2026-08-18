@@ -18,6 +18,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
+import { Route as AuthenticatedLibraryPromptIdRouteImport } from './routes/_authenticated/library.$promptId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,12 @@ const AuthenticatedLibraryIndexRoute =
     path: '/library/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedLibraryPromptIdRoute =
+  AuthenticatedLibraryPromptIdRouteImport.update({
+    id: '/library/$promptId',
+    path: '/library/$promptId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
+  '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRoutesByTo {
@@ -83,6 +91,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
+  '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRoutesById {
@@ -95,6 +104,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
+  '/_authenticated/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
 }
 export interface FileRouteTypes {
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/forge'
     | '/api/ai'
+    | '/library/$promptId'
     | '/library/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/forge'
     | '/api/ai'
+    | '/library/$promptId'
     | '/library'
   id:
     | '__root__'
@@ -128,6 +140,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/forge'
     | '/api/ai'
+    | '/_authenticated/library/$promptId'
     | '/_authenticated/library/'
   fileRoutesById: FileRoutesById
 }
@@ -205,18 +218,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLibraryIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/library/$promptId': {
+      id: '/_authenticated/library/$promptId'
+      path: '/library/$promptId'
+      fullPath: '/library/$promptId'
+      preLoaderRoute: typeof AuthenticatedLibraryPromptIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedForgeRoute: typeof AuthenticatedForgeRoute
+  AuthenticatedLibraryPromptIdRoute: typeof AuthenticatedLibraryPromptIdRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedForgeRoute: AuthenticatedForgeRoute,
+  AuthenticatedLibraryPromptIdRoute: AuthenticatedLibraryPromptIdRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
 }
 
