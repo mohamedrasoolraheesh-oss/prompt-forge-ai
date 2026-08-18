@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
+import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedLibraryPromptIdRouteImport } from './routes/_authenticated/library.$promptId'
@@ -54,6 +55,11 @@ const AuthenticatedForgeRoute = AuthenticatedForgeRouteImport.update({
   path: '/forge',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOptimizeRoute = AuthenticatedOptimizeRouteImport.update({
+  id: '/optimize',
+  path: '/optimize',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiAiRoute = ApiAiRouteImport.update({
   id: '/api/ai',
   path: '/api/ai',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
+  '/optimize': typeof AuthenticatedOptimizeRoute
   '/api/ai': typeof ApiAiRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
+  '/optimize': typeof AuthenticatedOptimizeRoute
   '/api/ai': typeof ApiAiRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/forge': typeof AuthenticatedForgeRoute
+  '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
   '/api/ai': typeof ApiAiRoute
   '/_authenticated/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/forge'
+    | '/optimize'
     | '/api/ai'
     | '/library/$promptId'
     | '/library/'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/forge'
+    | '/optimize'
     | '/api/ai'
     | '/library/$promptId'
     | '/library'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/dashboard'
     | '/_authenticated/forge'
+    | '/_authenticated/optimize'
     | '/api/ai'
     | '/_authenticated/library/$promptId'
     | '/_authenticated/library/'
@@ -204,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedForgeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/optimize': {
+      id: '/_authenticated/optimize'
+      path: '/optimize'
+      fullPath: '/optimize'
+      preLoaderRoute: typeof AuthenticatedOptimizeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/ai': {
       id: '/api/ai'
       path: '/api/ai'
@@ -231,6 +250,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedForgeRoute: typeof AuthenticatedForgeRoute
+  AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
   AuthenticatedLibraryPromptIdRoute: typeof AuthenticatedLibraryPromptIdRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
 }
@@ -238,6 +258,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedForgeRoute: AuthenticatedForgeRoute,
+  AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
   AuthenticatedLibraryPromptIdRoute: AuthenticatedLibraryPromptIdRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
 }
