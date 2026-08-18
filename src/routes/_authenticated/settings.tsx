@@ -58,7 +58,7 @@ function Settings() {
       if (!auth.user) throw new Error("Not signed in");
       const { error } = await supabase.from("profiles").upsert({
         id: auth.user.id,
-        email: auth.user.email,
+        email: auth.user.email ?? null,
         full_name: name,
         default_model: model,
         default_style: style,

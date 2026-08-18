@@ -20,6 +20,7 @@ import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedPlaygroundRouteImport } from './routes/_authenticated/playground'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
@@ -79,6 +80,11 @@ const AuthenticatedPlaygroundRoute = AuthenticatedPlaygroundRouteImport.update({
   path: '/playground',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
   '/_authenticated/playground': typeof AuthenticatedPlaygroundRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/_authenticated/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/optimize'
     | '/playground'
+    | '/settings'
     | '/templates'
     | '/api/ai'
     | '/library/$promptId'
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/optimize'
     | '/playground'
+    | '/settings'
     | '/templates'
     | '/api/ai'
     | '/library/$promptId'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/optimize'
     | '/_authenticated/playground'
+    | '/_authenticated/settings'
     | '/_authenticated/templates'
     | '/api/ai'
     | '/_authenticated/library/$promptId'
@@ -292,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlaygroundRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates': {
       id: '/_authenticated/templates'
       path: '/templates'
@@ -330,6 +349,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
   AuthenticatedPlaygroundRoute: typeof AuthenticatedPlaygroundRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
   AuthenticatedLibraryPromptIdRoute: typeof AuthenticatedLibraryPromptIdRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
@@ -342,6 +362,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
   AuthenticatedPlaygroundRoute: AuthenticatedPlaygroundRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
   AuthenticatedLibraryPromptIdRoute: AuthenticatedLibraryPromptIdRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,

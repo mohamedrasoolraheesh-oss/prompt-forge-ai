@@ -118,8 +118,6 @@ function Dashboard() {
                 icon={Sparkles}
                 title="No prompts yet"
                 description="Forge your first prompt and it will show up here."
-                actionLabel="Open the Forge"
-                actionTo="/forge"
               />
             )}
             {data?.prompts.slice(0, 5).map((p) => (
@@ -129,7 +127,7 @@ function Dashboard() {
                 params={{ promptId: p.id }}
                 className="flex items-center gap-4 rounded-lg border border-border/60 bg-surface p-3 transition-colors hover:border-primary/40"
               >
-                <ScoreRing value={p.quality_score ?? 0} size={44} stroke={4} />
+                <ScoreRing score={p.quality_score ?? 0} size={44} stroke={4} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium">{p.title}</span>
                   <span className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
