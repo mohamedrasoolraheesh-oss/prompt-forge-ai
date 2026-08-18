@@ -15,6 +15,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
 
 const IndexRoute = IndexRouteImport.update({
@@ -46,6 +47,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedForgeRoute = AuthenticatedForgeRouteImport.update({
+  id: '/forge',
+  path: '/forge',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiAiRoute = ApiAiRouteImport.update({
   id: '/api/ai',
   path: '/api/ai',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
 }
 export interface FileRoutesByTo {
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
 }
 export interface FileRoutesById {
@@ -76,14 +84,28 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/forge': typeof AuthenticatedForgeRoute
   '/api/ai': typeof ApiAiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/forgot-password' | '/login' | '/signup' | '/dashboard' | '/api/ai'
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/dashboard'
+    | '/forge'
+    | '/api/ai'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/signup' | '/dashboard' | '/api/ai'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/dashboard'
+    | '/forge'
+    | '/api/ai'
   id:
     | '__root__'
     | '/'
@@ -92,6 +114,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/_authenticated/dashboard'
+    | '/_authenticated/forge'
     | '/api/ai'
   fileRoutesById: FileRoutesById
 }
@@ -148,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/forge': {
+      id: '/_authenticated/forge'
+      path: '/forge'
+      fullPath: '/forge'
+      preLoaderRoute: typeof AuthenticatedForgeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/ai': {
       id: '/api/ai'
       path: '/api/ai'
@@ -160,10 +190,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedForgeRoute: typeof AuthenticatedForgeRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedForgeRoute: AuthenticatedForgeRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
