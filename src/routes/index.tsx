@@ -146,7 +146,7 @@ function Landing() {
                   <span className="size-2.5 rounded-full bg-success/70" />
                   <span className="ml-2 font-mono text-[11px] text-muted-foreground">forge / react-a11y-reviewer</span>
                   <span className="ml-auto">
-                    <ScoreRing score={score} size={38} stroke={4} />
+                    <ScoreRing score={score} size={38} stroke={4} label={false} />
                   </span>
                 </div>
                 <pre className="max-h-[380px] overflow-auto whitespace-pre-wrap px-5 py-4 font-mono text-[12.5px] leading-relaxed text-muted-foreground">
