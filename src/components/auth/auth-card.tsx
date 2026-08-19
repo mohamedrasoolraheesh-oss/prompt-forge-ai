@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Loader2, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -38,6 +38,17 @@ export function AuthCard({ mode }: { mode: Mode }) {
   const [sent, setSent] = useState(false);
   const copy = COPY[mode];
 
+  // Already signed in? Don't show the form — go straight to the workspace.
+  useEffect(() => {
+    let cancelled = false;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled && data.session) void navigate({ to: "/dashboard", replace: true });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.includes("@")) {
@@ -60,7 +71,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`,
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: { full_name: name || email.split("@")[0] },
           },
         });
@@ -75,7 +86,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
         }
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/login`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         });
         if (error) throw error;
         setSent(true);
@@ -92,14 +103,15 @@ export function AuthCard({ mode }: { mode: Mode }) {
     setGoogleLoading(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/auth/callback`,
       });
       if (result.error) {
         toast.error(result.error.message ?? "Google sign-in failed");
         return;
       }
       if (result.redirected) return;
-      void navigate({ to: "/dashboard" });
+      // Popup flow (editor preview): the session is already set here.
+      void navigate({ to: "/auth/callback", replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed");
     } finally {
