@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/score-ring";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,6 +70,8 @@ const STEPS = [
 ];
 
 function Landing() {
+  const { session, loading } = useAuth();
+  const signedIn = !loading && !!session;
   const [score, setScore] = useState(0);
   useEffect(() => {
     const t = setTimeout(() => setScore(94), 400);
@@ -86,14 +89,24 @@ function Landing() {
             <span className="font-display text-[15px] font-bold tracking-tight">Prompt Forge AI</span>
           </Link>
           <nav className="ml-auto flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/login">Sign in</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/signup">
-                Start free <ArrowRight className="size-4" />
-              </Link>
-            </Button>
+            {signedIn ? (
+              <Button asChild size="sm">
+                <Link to="/dashboard">
+                  Open dashboard <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/login">Sign in</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link to="/signup">
+                    Start free <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              </>
+            )}
           </nav>
         </div>
       </header>
@@ -121,12 +134,12 @@ function Landing() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild size="lg">
-                  <Link to="/signup">
-                    Start forging free <ArrowRight className="size-4" />
+                  <Link to={signedIn ? "/dashboard" : "/signup"}>
+                    {signedIn ? "Open your dashboard" : "Start forging free"} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link to="/login">See it in action</Link>
+                  <Link to={signedIn ? "/forge" : "/login"}>{signedIn ? "Go to the Forge" : "See it in action"}</Link>
                 </Button>
               </div>
               <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
@@ -216,8 +229,8 @@ function Landing() {
                 Create your workspace and forge your first production-grade prompt in under a minute.
               </p>
               <Button asChild size="lg" className="mt-7">
-                <Link to="/signup">
-                  Get started free <ArrowRight className="size-4" />
+                <Link to={signedIn ? "/dashboard" : "/signup"}>
+                  {signedIn ? "Open your dashboard" : "Get started free"} <ArrowRight className="size-4" />
                 </Link>
               </Button>
             </div>

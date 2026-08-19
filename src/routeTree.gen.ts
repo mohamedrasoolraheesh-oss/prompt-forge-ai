@@ -23,6 +23,7 @@ import { Route as AuthenticatedPlaygroundRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library.index'
 import { Route as AuthenticatedLibraryPromptIdRouteImport } from './routes/_authenticated/library.$promptId'
 
@@ -95,6 +96,11 @@ const ApiAiRoute = ApiAiRouteImport.update({
   path: '/api/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedLibraryIndexRoute =
   AuthenticatedLibraryIndexRouteImport.update({
     id: '/library/',
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library/': typeof AuthenticatedLibraryIndexRoute
 }
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/library': typeof AuthenticatedLibraryIndexRoute
 }
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/library/$promptId': typeof AuthenticatedLibraryPromptIdRoute
   '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
 }
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/templates'
     | '/api/ai'
+    | '/auth/callback'
     | '/library/$promptId'
     | '/library/'
   fileRoutesByTo: FileRoutesByTo
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/templates'
     | '/api/ai'
+    | '/auth/callback'
     | '/library/$promptId'
     | '/library'
   id:
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/templates'
     | '/api/ai'
+    | '/auth/callback'
     | '/_authenticated/library/$promptId'
     | '/_authenticated/library/'
   fileRoutesById: FileRoutesById
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   ApiAiRoute: typeof ApiAiRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/library/': {
       id: '/_authenticated/library/'
       path: '/library'
@@ -378,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   ApiAiRoute: ApiAiRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
