@@ -24,7 +24,10 @@ export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — Prompt Forge AI" },
-      { name: "description", content: "Manage your Prompt Forge profile, default model, prompt style and appearance." },
+      {
+        name: "description",
+        content: "Manage your Prompt Forge profile, default model, prompt style and appearance.",
+      },
       { property: "og:title", content: "Settings — Prompt Forge AI" },
       { property: "og:description", content: "Manage your profile and prompt defaults." },
       { property: "og:type", content: "website" },
@@ -106,10 +109,14 @@ function Settings() {
           <div className="space-y-1.5">
             <Label>Default model</Label>
             <Select value={model} onValueChange={setModel}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {MODELS.map((m) => (
-                  <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                  <SelectItem key={m.value} value={m.value}>
+                    {m.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -117,10 +124,14 @@ function Settings() {
           <div className="space-y-1.5">
             <Label>Default style</Label>
             <Select value={style} onValueChange={setStyle}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {STYLES.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -142,7 +153,8 @@ function Settings() {
 
       <div className="mt-5 flex flex-wrap gap-2">
         <Button onClick={() => void save()} disabled={saving}>
-          {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save changes
+          {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
+          changes
         </Button>
         <Button
           variant="outline"

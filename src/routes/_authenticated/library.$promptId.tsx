@@ -20,7 +20,10 @@ export const Route = createFileRoute("/_authenticated/library/$promptId")({
   head: () => ({
     meta: [
       { title: "Prompt detail — Prompt Forge AI" },
-      { name: "description", content: "Review, edit, re-score and version a saved prompt in your Prompt Forge library." },
+      {
+        name: "description",
+        content: "Review, edit, re-score and version a saved prompt in your Prompt Forge library.",
+      },
       { property: "og:title", content: "Prompt detail — Prompt Forge AI" },
       { property: "og:description", content: "Review, edit and version a saved prompt." },
       { property: "og:type", content: "website" },
@@ -67,7 +70,10 @@ function PromptDetail() {
   if (error || !data) {
     return (
       <div className="mx-auto w-full max-w-3xl px-4 py-16">
-        <ErrorState message="We couldn't load that prompt." onRetry={() => void queryClient.invalidateQueries()} />
+        <ErrorState
+          message="We couldn't load that prompt."
+          onRetry={() => void queryClient.invalidateQueries()}
+        />
       </div>
     );
   }
@@ -153,9 +159,15 @@ function PromptDetail() {
             className="h-auto border-0 bg-transparent px-0 font-display text-2xl font-bold tracking-tight shadow-none focus-visible:ring-0"
           />
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <Badge variant="secondary" className="capitalize">{p.category}</Badge>
-            <Badge variant="outline" className="uppercase">{p.model}</Badge>
-            <Badge variant="outline" className="capitalize">{p.style}</Badge>
+            <Badge variant="secondary" className="capitalize">
+              {p.category}
+            </Badge>
+            <Badge variant="outline" className="uppercase">
+              {p.model}
+            </Badge>
+            <Badge variant="outline" className="capitalize">
+              {p.style}
+            </Badge>
             <Badge variant="outline">v{p.version}</Badge>
           </div>
         </div>
@@ -182,9 +194,15 @@ function PromptDetail() {
             </Link>
           </Button>
           <Button size="sm" onClick={() => void saveVersion()} disabled={!dirty || busy}>
-            {busy ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save version
+            {busy ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
+            version
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Delete prompt" onClick={() => void remove()}>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Delete prompt"
+            onClick={() => void remove()}
+          >
             <Trash2 className="size-4 text-destructive" />
           </Button>
         </div>
@@ -232,7 +250,11 @@ function PromptDetail() {
                       {v.note ?? "—"} · {new Date(v.created_at).toLocaleString()}
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => void restore(v.version, v.content)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => void restore(v.version, v.content)}
+                  >
                     Restore
                   </Button>
                 </div>
@@ -254,7 +276,9 @@ function PromptDetail() {
                 <ScoreBar key={k} name={SCORE_LABELS[k] ?? k} value={Number(v)} />
               ))}
               {!Object.keys(breakdown).length && (
-                <p className="text-sm text-muted-foreground">Save a version to generate a breakdown.</p>
+                <p className="text-sm text-muted-foreground">
+                  Save a version to generate a breakdown.
+                </p>
               )}
             </div>
           </div>
@@ -264,7 +288,10 @@ function PromptDetail() {
               <ul className="mt-2 space-y-1.5">
                 {suggestions.map((s) => (
                   <li key={s} className="flex gap-2 text-sm text-muted-foreground">
-                    <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+                    <span
+                      className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+                      aria-hidden
+                    />
                     {s}
                   </li>
                 ))}

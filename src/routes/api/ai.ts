@@ -161,7 +161,9 @@ export const Route = createFileRoute("/api/ai")({
                       cost: +((tokens / 1000) * PROVIDERS[key].costPer1k).toFixed(5),
                       score: Math.min(
                         99,
-                        70 + Math.round(Math.min(text.length, 3000) / 120) + (text.includes("\n") ? 4 : 0),
+                        70 +
+                          Math.round(Math.min(text.length, 3000) / 120) +
+                          (text.includes("\n") ? 4 : 0),
                       ),
                       error: null as string | null,
                     };

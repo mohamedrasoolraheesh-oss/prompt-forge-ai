@@ -5,7 +5,11 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Sign in — Prompt Forge AI" },
-      { name: "description", content: "Sign in to Prompt Forge AI to generate, optimize and test production-grade AI prompts." },
+      {
+        name: "description",
+        content:
+          "Sign in to Prompt Forge AI to generate, optimize and test production-grade AI prompts.",
+      },
       { property: "og:title", content: "Sign in — Prompt Forge AI" },
       { property: "og:description", content: "Sign in to your Prompt Forge AI workspace." },
       { property: "og:type", content: "website" },

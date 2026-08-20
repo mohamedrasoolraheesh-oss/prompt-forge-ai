@@ -32,13 +32,21 @@ async function ensureProfile() {
   const { data } = await supabase.auth.getUser();
   const user = data.user;
   if (!user) return;
-  const { data: existing } = await supabase.from("profiles").select("id").eq("id", user.id).maybeSingle();
+  const { data: existing } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
   if (existing) return;
   const meta = user.user_metadata ?? {};
   await supabase.from("profiles").insert({
     id: user.id,
     email: user.email ?? null,
-    full_name: (meta["full_name"] as string) ?? (meta["name"] as string) ?? user.email?.split("@")[0] ?? null,
+    full_name:
+      (meta["full_name"] as string) ??
+      (meta["name"] as string) ??
+      user.email?.split("@")[0] ??
+      null,
     avatar_url: (meta["avatar_url"] as string) ?? null,
   });
 }

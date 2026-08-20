@@ -53,20 +53,64 @@ OUTPUT FORMAT
 A markdown table: severity | file:line | issue | fix`;
 
 const FEATURES = [
-  { icon: Sparkles, title: "AI Prompt Forge", body: "Describe an idea; get a role-, context- and constraint-complete prompt in seconds." },
-  { icon: Gauge, title: "Quality scoring", body: "Every prompt is graded on clarity, specificity, constraints, output definition and robustness." },
-  { icon: Wand2, title: "One-click optimize", body: "Nine targeted rewrite modes with a before/after score delta you can actually trust." },
-  { icon: FlaskConical, title: "Live playground", body: "Run prompts with {{variables}}, temperature and token controls. Stream the response." },
-  { icon: LibraryBig, title: "Library & versions", body: "Save, tag, favorite and roll back — every edit is a recoverable version." },
-  { icon: BarChart3, title: "Analytics", body: "Quality trends, category mix, model usage and run latency at a glance." },
-  { icon: LayoutTemplate, title: "Template gallery", body: "Curated, high-scoring starting points for coding, marketing, research and more." },
-  { icon: History, title: "Full run history", body: "Every execution recorded with model, latency, tokens and the full response." },
+  {
+    icon: Sparkles,
+    title: "AI Prompt Forge",
+    body: "Describe an idea; get a role-, context- and constraint-complete prompt in seconds.",
+  },
+  {
+    icon: Gauge,
+    title: "Quality scoring",
+    body: "Every prompt is graded on clarity, specificity, constraints, output definition and robustness.",
+  },
+  {
+    icon: Wand2,
+    title: "One-click optimize",
+    body: "Nine targeted rewrite modes with a before/after score delta you can actually trust.",
+  },
+  {
+    icon: FlaskConical,
+    title: "Live playground",
+    body: "Run prompts with {{variables}}, temperature and token controls. Stream the response.",
+  },
+  {
+    icon: LibraryBig,
+    title: "Library & versions",
+    body: "Save, tag, favorite and roll back — every edit is a recoverable version.",
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics",
+    body: "Quality trends, category mix, model usage and run latency at a glance.",
+  },
+  {
+    icon: LayoutTemplate,
+    title: "Template gallery",
+    body: "Curated, high-scoring starting points for coding, marketing, research and more.",
+  },
+  {
+    icon: History,
+    title: "Full run history",
+    body: "Every execution recorded with model, latency, tokens and the full response.",
+  },
 ];
 
 const STEPS = [
-  { n: "01", title: "Describe the idea", body: "One sentence is enough. Pick a category, model and writing style." },
-  { n: "02", title: "Forge and score", body: "Watch the structured prompt stream in, then read its quality breakdown." },
-  { n: "03", title: "Test and ship", body: "Run it in the playground, optimize weak spots, save the winning version." },
+  {
+    n: "01",
+    title: "Describe the idea",
+    body: "One sentence is enough. Pick a category, model and writing style.",
+  },
+  {
+    n: "02",
+    title: "Forge and score",
+    body: "Watch the structured prompt stream in, then read its quality breakdown.",
+  },
+  {
+    n: "03",
+    title: "Test and ship",
+    body: "Run it in the playground, optimize weak spots, save the winning version.",
+  },
 ];
 
 function Landing() {
@@ -86,7 +130,9 @@ function Landing() {
             <span className="grid size-8 place-items-center rounded-lg forge-gradient shadow-glow">
               <Zap className="size-4 text-white" aria-hidden />
             </span>
-            <span className="font-display text-[15px] font-bold tracking-tight">Prompt Forge AI</span>
+            <span className="font-display text-[15px] font-bold tracking-tight">
+              Prompt Forge AI
+            </span>
           </Link>
           <nav className="ml-auto flex items-center gap-2">
             {signedIn ? (
@@ -129,17 +175,20 @@ function Landing() {
                 that <span className="text-gradient">actually work</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Prompt Forge AI turns a rough idea into a structured, model-ready prompt — then scores it,
-                optimizes it, versions it and lets you test it live. No more guesswork.
+                Prompt Forge AI turns a rough idea into a structured, model-ready prompt — then
+                scores it, optimizes it, versions it and lets you test it live. No more guesswork.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild size="lg">
                   <Link to={signedIn ? "/dashboard" : "/signup"}>
-                    {signedIn ? "Open your dashboard" : "Start forging free"} <ArrowRight className="size-4" />
+                    {signedIn ? "Open your dashboard" : "Start forging free"}{" "}
+                    <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
-                  <Link to={signedIn ? "/forge" : "/login"}>{signedIn ? "Go to the Forge" : "See it in action"}</Link>
+                  <Link to={signedIn ? "/forge" : "/login"}>
+                    {signedIn ? "Go to the Forge" : "See it in action"}
+                  </Link>
                 </Button>
               </div>
               <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
@@ -157,7 +206,9 @@ function Landing() {
                   <span className="size-2.5 rounded-full bg-destructive/70" />
                   <span className="size-2.5 rounded-full bg-warning/70" />
                   <span className="size-2.5 rounded-full bg-success/70" />
-                  <span className="ml-2 font-mono text-[11px] text-muted-foreground">forge / react-a11y-reviewer</span>
+                  <span className="ml-2 font-mono text-[11px] text-muted-foreground">
+                    forge / react-a11y-reviewer
+                  </span>
                   <span className="ml-auto">
                     <ScoreRing score={score} size={38} stroke={4} label={false} />
                   </span>
@@ -181,8 +232,8 @@ function Landing() {
               Everything a prompt needs<span className="text-primary">.</span>
             </h2>
             <p className="mt-3 max-w-2xl text-muted-foreground">
-              A complete workspace: generation, evaluation, iteration and testing — instead of a scratchpad
-              full of half-remembered prompts.
+              A complete workspace: generation, evaluation, iteration and testing — instead of a
+              scratchpad full of half-remembered prompts.
             </p>
             <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {FEATURES.map(({ icon: Icon, title, body }) => (
@@ -204,7 +255,9 @@ function Landing() {
         {/* How it works */}
         <section className="border-t border-border px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-6xl">
-            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">Three steps to a better prompt</h2>
+            <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Three steps to a better prompt
+            </h2>
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               {STEPS.map((s) => (
                 <div key={s.n} className="panel relative p-6">
@@ -220,17 +273,22 @@ function Landing() {
         {/* CTA */}
         <section className="border-t border-border px-4 py-20 sm:px-6">
           <div className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl border border-primary/25 p-10 text-center">
-            <div className="pointer-events-none absolute inset-0 forge-gradient opacity-[0.14]" aria-hidden />
+            <div
+              className="pointer-events-none absolute inset-0 forge-gradient opacity-[0.14]"
+              aria-hidden
+            />
             <div className="relative">
               <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
                 Stop guessing. Start forging.
               </h2>
               <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-                Create your workspace and forge your first production-grade prompt in under a minute.
+                Create your workspace and forge your first production-grade prompt in under a
+                minute.
               </p>
               <Button asChild size="lg" className="mt-7">
                 <Link to={signedIn ? "/dashboard" : "/signup"}>
-                  {signedIn ? "Open your dashboard" : "Get started free"} <ArrowRight className="size-4" />
+                  {signedIn ? "Open your dashboard" : "Get started free"}{" "}
+                  <ArrowRight className="size-4" />
                 </Link>
               </Button>
             </div>

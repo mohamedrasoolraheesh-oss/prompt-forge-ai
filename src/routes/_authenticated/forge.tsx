@@ -35,7 +35,11 @@ export const Route = createFileRoute("/_authenticated/forge")({
   head: () => ({
     meta: [
       { title: "Forge — Prompt Forge AI" },
-      { name: "description", content: "Turn a rough idea into a structured, production-grade AI prompt with live quality scoring." },
+      {
+        name: "description",
+        content:
+          "Turn a rough idea into a structured, production-grade AI prompt with live quality scoring.",
+      },
       { property: "og:title", content: "Forge — Prompt Forge AI" },
       { property: "og:description", content: "Turn rough ideas into production-grade AI prompts." },
       { property: "og:type", content: "website" },
@@ -193,30 +197,42 @@ function Forge() {
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             <Field label="Category">
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {CATEGORIES.map((c) => (
-                    <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>
+                    <SelectItem key={c} value={c} className="capitalize">
+                      {c}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </Field>
             <Field label="Model">
               <Select value={model} onValueChange={setModel}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {MODELS.map((m) => (
-                    <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                    <SelectItem key={m.value} value={m.value}>
+                      {m.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </Field>
             <Field label="Style">
               <Select value={style} onValueChange={setStyle}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {STYLES.map((s) => (
-                    <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                    <SelectItem key={s.value} value={s.value}>
+                      {s.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -225,7 +241,11 @@ function Forge() {
 
           <div className="mt-5 flex gap-2">
             {streaming ? (
-              <Button variant="outline" className="flex-1" onClick={() => abortRef.current?.abort()}>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => abortRef.current?.abort()}
+              >
                 <Square className="size-4" /> Stop
               </Button>
             ) : (
@@ -233,8 +253,13 @@ function Forge() {
                 <Sparkles className="size-4" /> Forge prompt
               </Button>
             )}
-            <Button variant="secondary" onClick={() => void save()} disabled={!output || saving || streaming}>
-              {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
+            <Button
+              variant="secondary"
+              onClick={() => void save()}
+              disabled={!output || saving || streaming}
+            >
+              {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}{" "}
+              Save
             </Button>
           </div>
         </section>
@@ -288,7 +313,10 @@ function Forge() {
                         <ul className="mt-2 space-y-1.5">
                           {suggestions.map((s) => (
                             <li key={s} className="flex gap-2 text-sm text-muted-foreground">
-                              <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+                              <span
+                                className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"
+                                aria-hidden
+                              />
                               {s}
                             </li>
                           ))}

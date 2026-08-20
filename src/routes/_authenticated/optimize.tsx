@@ -23,9 +23,16 @@ export const Route = createFileRoute("/_authenticated/optimize")({
   head: () => ({
     meta: [
       { title: "Optimize — Prompt Forge AI" },
-      { name: "description", content: "Rewrite and improve any prompt with targeted optimization modes and before/after quality scoring." },
+      {
+        name: "description",
+        content:
+          "Rewrite and improve any prompt with targeted optimization modes and before/after quality scoring.",
+      },
       { property: "og:title", content: "Optimize — Prompt Forge AI" },
-      { property: "og:description", content: "Improve any prompt with before/after quality scoring." },
+      {
+        property: "og:description",
+        content: "Improve any prompt with before/after quality scoring.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -189,7 +196,11 @@ function Optimize() {
           />
           <div className="mt-4 flex gap-2">
             {streaming ? (
-              <Button variant="outline" className="flex-1" onClick={() => abortRef.current?.abort()}>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => abortRef.current?.abort()}
+              >
                 <Square className="size-4" /> Stop
               </Button>
             ) : (
@@ -229,8 +240,18 @@ function Optimize() {
                 <div className="flex items-center gap-2">
                   {afterScore !== null && <ScoreRing score={afterScore} size={44} stroke={4} />}
                   {!streaming && improved && <CopyButton text={improved} />}
-                  <Button size="sm" variant="secondary" onClick={() => void saveAsNew()} disabled={saving || streaming}>
-                    {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => void saveAsNew()}
+                    disabled={saving || streaming}
+                  >
+                    {saving ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <Save className="size-4" />
+                    )}{" "}
+                    Save
                   </Button>
                 </div>
               </div>

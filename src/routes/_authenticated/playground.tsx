@@ -30,9 +30,16 @@ export const Route = createFileRoute("/_authenticated/playground")({
   head: () => ({
     meta: [
       { title: "Playground — Prompt Forge AI" },
-      { name: "description", content: "Run prompts with live variables, tune temperature and tokens, and inspect latency, cost and output." },
+      {
+        name: "description",
+        content:
+          "Run prompts with live variables, tune temperature and tokens, and inspect latency, cost and output.",
+      },
       { property: "og:title", content: "Playground — Prompt Forge AI" },
-      { property: "og:description", content: "Test prompts with variables, temperature and token controls." },
+      {
+        property: "og:description",
+        content: "Test prompts with variables, temperature and token controls.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -123,7 +130,8 @@ function Playground() {
       <header className="animate-rise">
         <h1 className="font-display text-3xl font-bold tracking-tight">Playground</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">
-          Test prompts with <code className="rounded bg-muted px-1 font-mono text-xs">{"{{variables}}"}</code>, tune
+          Test prompts with{" "}
+          <code className="rounded bg-muted px-1 font-mono text-xs">{"{{variables}}"}</code>, tune
           settings, and inspect the response.
         </p>
       </header>
@@ -142,10 +150,14 @@ function Playground() {
 
           {variables.length > 0 && (
             <div className="mt-4 space-y-2">
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Variables</p>
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Variables
+              </p>
               {variables.map((v) => (
                 <div key={v} className="flex items-center gap-2">
-                  <code className="w-32 shrink-0 truncate rounded bg-muted px-2 py-1 font-mono text-xs">{v}</code>
+                  <code className="w-32 shrink-0 truncate rounded bg-muted px-2 py-1 font-mono text-xs">
+                    {v}
+                  </code>
                   <Input
                     value={vars[v] ?? ""}
                     onChange={(e) => setVars((p) => ({ ...p, [v]: e.target.value }))}
@@ -161,10 +173,14 @@ function Playground() {
             <div className="space-y-1.5">
               <Label>Model</Label>
               <Select value={model} onValueChange={setModel}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {MODELS.map((m) => (
-                    <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                    <SelectItem key={m.value} value={m.value}>
+                      {m.label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -199,7 +215,11 @@ function Playground() {
 
           <div className="mt-5">
             {running ? (
-              <Button variant="outline" className="w-full" onClick={() => abortRef.current?.abort()}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => abortRef.current?.abort()}
+              >
                 <Square className="size-4" /> Stop
               </Button>
             ) : (
@@ -240,7 +260,9 @@ function Playground() {
               </div>
               <pre className="max-h-[62vh] overflow-auto whitespace-pre-wrap break-words rounded-lg bg-surface p-4 font-mono text-[13px] leading-relaxed">
                 {response}
-                {running && <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-primary align-middle" />}
+                {running && (
+                  <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse bg-primary align-middle" />
+                )}
               </pre>
             </div>
           )}
