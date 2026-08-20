@@ -79,7 +79,7 @@ function Templates() {
     );
   }, [data, q]);
 
-  async function useTemplate(t: Template) {
+  async function applyTemplate(t: Template) {
     setBusy(true);
     try {
       const { data: auth } = await supabase.auth.getUser();
@@ -169,7 +169,7 @@ function Templates() {
               <Button
                 size="sm"
                 className="flex-1"
-                onClick={() => void useTemplate(t)}
+                onClick={() => void applyTemplate(t)}
                 disabled={busy}
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null} Use
@@ -198,7 +198,7 @@ function Templates() {
           {active && <PromptView content={active.content} />}
           <DialogFooter className="gap-2 sm:gap-2">
             {active && <CopyButton text={active.content} />}
-            <Button onClick={() => active && void useTemplate(active)} disabled={busy}>
+            <Button onClick={() => active && void applyTemplate(active)} disabled={busy}>
               Use template
             </Button>
           </DialogFooter>
