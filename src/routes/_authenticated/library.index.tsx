@@ -23,7 +23,11 @@ export const Route = createFileRoute("/_authenticated/library/")({
   head: () => ({
     meta: [
       { title: "Library — Prompt Forge AI" },
-      { name: "description", content: "Search, filter and manage every prompt you've forged, with quality scores and version history." },
+      {
+        name: "description",
+        content:
+          "Search, filter and manage every prompt you've forged, with quality scores and version history.",
+      },
       { property: "og:title", content: "Library — Prompt Forge AI" },
       { property: "og:description", content: "Search and manage every prompt you've forged." },
       { property: "og:type", content: "website" },
@@ -95,7 +99,10 @@ function LibraryPage() {
 
       <div className="mt-6 flex flex-col gap-2 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -105,16 +112,22 @@ function LibraryPage() {
           />
         </div>
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="sm:w-44"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="sm:w-44">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All categories</SelectItem>
             {CATEGORIES.map((c) => (
-              <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>
+              <SelectItem key={c} value={c} className="capitalize">
+                {c}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={sort} onValueChange={setSort}>
-          <SelectTrigger className="sm:w-40"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="sm:w-40">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="recent">Most recent</SelectItem>
             <SelectItem value="score">Highest score</SelectItem>
@@ -125,7 +138,8 @@ function LibraryPage() {
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {isLoading && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-xl" />)}
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-44 rounded-xl" />)}
       </div>
 
       {!isLoading && !rows.length && (
@@ -158,12 +172,18 @@ function LibraryPage() {
                 >
                   {p.title}
                 </Link>
-                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{p.idea || p.content}</p>
+                <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                  {p.idea || p.content}
+                </p>
               </div>
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-1.5">
-              <Badge variant="secondary" className="capitalize">{p.category}</Badge>
-              <Badge variant="outline" className="uppercase">{p.model}</Badge>
+              <Badge variant="secondary" className="capitalize">
+                {p.category}
+              </Badge>
+              <Badge variant="outline" className="uppercase">
+                {p.model}
+              </Badge>
               <Badge variant="outline">v{p.version}</Badge>
             </div>
             <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-3">
@@ -179,7 +199,12 @@ function LibraryPage() {
                 >
                   <Star className={p.is_favorite ? "size-4 fill-warning text-warning" : "size-4"} />
                 </Button>
-                <Button size="icon" variant="ghost" aria-label="Delete prompt" onClick={() => void remove(p.id)}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  aria-label="Delete prompt"
+                  onClick={() => void remove(p.id)}
+                >
                   <Trash2 className="size-4 text-destructive" />
                 </Button>
               </div>

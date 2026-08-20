@@ -101,7 +101,8 @@ export function parseSections(content: string) {
   for (const line of lines) {
     const heading = SECTION_ORDER.find((h) => line.trim().toUpperCase() === h);
     if (heading) {
-      if (current) sections.push({ heading: current.heading, body: current.body.join("\n").trim() });
+      if (current)
+        sections.push({ heading: current.heading, body: current.body.join("\n").trim() });
       current = { heading, body: [] };
     } else if (current) {
       current.body.push(line);

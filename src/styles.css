@@ -61,7 +61,8 @@
   --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --shadow-glow: 0 0 0 1px oklch(0.62 0.21 292 / 0.25), 0 18px 60px -20px oklch(0.62 0.21 292 / 0.45);
+  --shadow-glow:
+    0 0 0 1px oklch(0.62 0.21 292 / 0.25), 0 18px 60px -20px oklch(0.62 0.21 292 / 0.45);
   --shadow-panel: 0 1px 0 0 oklch(1 0 0 / 0.04) inset, 0 24px 60px -30px oklch(0 0 0 / 0.8);
 }
 

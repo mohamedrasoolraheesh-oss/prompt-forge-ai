@@ -165,7 +165,11 @@ Style: ${styleHints[input.style] ?? styleHints["detailed"]}`,
   ];
 }
 
-export function optimizeMessages(input: { prompt: string; modes: string[]; model: ModelKey }): Msg[] {
+export function optimizeMessages(input: {
+  prompt: string;
+  modes: string[];
+  model: ModelKey;
+}): Msg[] {
   return [
     {
       role: "system",

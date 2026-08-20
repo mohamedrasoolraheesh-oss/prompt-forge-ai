@@ -24,9 +24,16 @@ export const Route = createFileRoute("/_authenticated/templates")({
   head: () => ({
     meta: [
       { title: "Templates — Prompt Forge AI" },
-      { name: "description", content: "A curated library of high-scoring prompt templates for coding, marketing, research and more." },
+      {
+        name: "description",
+        content:
+          "A curated library of high-scoring prompt templates for coding, marketing, research and more.",
+      },
       { property: "og:title", content: "Templates — Prompt Forge AI" },
-      { property: "og:description", content: "Curated, high-scoring prompt templates you can use instantly." },
+      {
+        property: "og:description",
+        content: "Curated, high-scoring prompt templates you can use instantly.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -72,7 +79,7 @@ function Templates() {
     );
   }, [data, q]);
 
-  async function useTemplate(t: Template) {
+  async function applyTemplate(t: Template) {
     setBusy(true);
     try {
       const { data: auth } = await supabase.auth.getUser();
@@ -118,7 +125,10 @@ function Templates() {
       </header>
 
       <div className="relative mt-6 max-w-md">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden
+        />
         <Input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -129,24 +139,39 @@ function Templates() {
       </div>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {isLoading && Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-xl" />)}
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-xl" />)}
         {rows.map((t) => (
-          <article key={t.id} className="panel flex flex-col p-5 transition-transform duration-200 hover:-translate-y-0.5">
+          <article
+            key={t.id}
+            className="panel flex flex-col p-5 transition-transform duration-200 hover:-translate-y-0.5"
+          >
             <div className="flex items-start justify-between gap-3">
               <h2 className="font-display text-base font-semibold leading-snug">{t.title}</h2>
               <ScoreRing score={t.quality_score} size={44} stroke={4} />
             </div>
-            <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">{t.description}</p>
+            <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">
+              {t.description}
+            </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
-              <Badge variant="secondary" className="capitalize">{t.category}</Badge>
-              <Badge variant="outline" className="uppercase">{t.recommended_model}</Badge>
+              <Badge variant="secondary" className="capitalize">
+                {t.category}
+              </Badge>
+              <Badge variant="outline" className="uppercase">
+                {t.recommended_model}
+              </Badge>
               {t.variables.length > 0 && <Badge variant="outline">{t.variables.length} vars</Badge>}
             </div>
             <div className="mt-4 flex gap-2">
               <Button size="sm" variant="outline" className="flex-1" onClick={() => setActive(t)}>
                 Preview
               </Button>
-              <Button size="sm" className="flex-1" onClick={() => void useTemplate(t)} disabled={busy}>
+              <Button
+                size="sm"
+                className="flex-1"
+                onClick={() => void applyTemplate(t)}
+                disabled={busy}
+              >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null} Use
               </Button>
             </div>
@@ -156,7 +181,11 @@ function Templates() {
 
       {!isLoading && !rows.length && (
         <div className="mt-5">
-          <EmptyState icon={LayoutTemplate} title="No templates match" description="Try a different search term." />
+          <EmptyState
+            icon={LayoutTemplate}
+            title="No templates match"
+            description="Try a different search term."
+          />
         </div>
       )}
 
@@ -169,7 +198,7 @@ function Templates() {
           {active && <PromptView content={active.content} />}
           <DialogFooter className="gap-2 sm:gap-2">
             {active && <CopyButton text={active.content} />}
-            <Button onClick={() => active && void useTemplate(active)} disabled={busy}>
+            <Button onClick={() => active && void applyTemplate(active)} disabled={busy}>
               Use template
             </Button>
           </DialogFooter>

@@ -201,9 +201,15 @@ export function AuthCard({ mode }: { mode: Mode }) {
         {mode !== "forgot" && (
           <>
             <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-widest text-muted-foreground">
-              <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+              <span className="h-px flex-1 bg-border" /> or{" "}
+              <span className="h-px flex-1 bg-border" />
             </div>
-            <Button variant="outline" className="w-full" onClick={onGoogle} disabled={googleLoading}>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={onGoogle}
+              disabled={googleLoading}
+            >
               {googleLoading ? (
                 <Loader2 className="size-4 animate-spin" aria-hidden />
               ) : (
@@ -218,14 +224,20 @@ export function AuthCard({ mode }: { mode: Mode }) {
           {mode === "login" ? (
             <>
               New here?{" "}
-              <Link to="/signup" className="font-medium text-foreground underline-offset-4 hover:underline">
+              <Link
+                to="/signup"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
                 Create an account
               </Link>
             </>
           ) : (
             <>
               Already have an account?{" "}
-              <Link to="/login" className="font-medium text-foreground underline-offset-4 hover:underline">
+              <Link
+                to="/login"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
                 Sign in
               </Link>
             </>

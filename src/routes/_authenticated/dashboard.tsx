@@ -21,7 +21,10 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Prompt Forge AI" },
-      { name: "description", content: "Your prompt engineering overview: quality scores, recent prompts and activity." },
+      {
+        name: "description",
+        content: "Your prompt engineering overview: quality scores, recent prompts and activity.",
+      },
       { property: "og:title", content: "Dashboard — Prompt Forge AI" },
       { property: "og:description", content: "Your prompt engineering overview at a glance." },
       { property: "og:type", content: "website" },
@@ -77,16 +80,24 @@ function Dashboard() {
         </h1>
       </header>
 
-      <section className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Overview stats">
+      <section
+        className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        aria-label="Overview stats"
+      >
         {isLoading
-          ? Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[104px] rounded-xl" />)
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-[104px] rounded-xl" />
+            ))
           : [
               { label: "Prompts", value: data?.prompts.length ?? 0, icon: LibraryBig },
               { label: "Avg. quality", value: data?.avg ?? 0, icon: TrendingUp, suffix: "/100" },
               { label: "Favorites", value: data?.favorites ?? 0, icon: Star },
               { label: "Test runs", value: data?.tests ?? 0, icon: FlaskConical },
             ].map(({ label, value, icon: Icon, suffix }) => (
-              <div key={label} className="panel p-5 transition-transform duration-200 hover:-translate-y-0.5">
+              <div
+                key={label}
+                className="panel p-5 transition-transform duration-200 hover:-translate-y-0.5"
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                     {label}
@@ -112,7 +123,10 @@ function Dashboard() {
             </Button>
           </div>
           <div className="mt-4 space-y-2">
-            {isLoading && Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-lg" />)}
+            {isLoading &&
+              Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 rounded-lg" />
+              ))}
             {!isLoading && !data?.prompts.length && (
               <EmptyState
                 icon={Sparkles}
@@ -131,11 +145,15 @@ function Dashboard() {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium">{p.title}</span>
                   <span className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-                    <Badge variant="secondary" className="capitalize">{p.category}</Badge>
+                    <Badge variant="secondary" className="capitalize">
+                      {p.category}
+                    </Badge>
                     <span className="uppercase">{p.model}</span>
                   </span>
                 </span>
-                {p.is_favorite && <Star className="size-4 fill-warning text-warning" aria-label="Favorite" />}
+                {p.is_favorite && (
+                  <Star className="size-4 fill-warning text-warning" aria-label="Favorite" />
+                )}
               </Link>
             ))}
           </div>

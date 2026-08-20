@@ -56,7 +56,11 @@ export function useProfile() {
     queryFn: async () => {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) return null;
-      const { data } = await supabase.from("profiles").select("*").eq("id", auth.user.id).maybeSingle();
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", auth.user.id)
+        .maybeSingle();
       return (
         data ?? {
           id: auth.user.id,
@@ -98,7 +102,13 @@ function NavLinks({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: 
             {active && (
               <span className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r forge-gradient" />
             )}
-            <Icon className={cn("size-4 shrink-0 transition-transform group-hover:scale-110", active && "text-primary")} aria-hidden />
+            <Icon
+              className={cn(
+                "size-4 shrink-0 transition-transform group-hover:scale-110",
+                active && "text-primary",
+              )}
+              aria-hidden
+            />
             {!collapsed && <span className="truncate">{label}</span>}
           </Link>
         );
@@ -220,7 +230,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             onClick={() => setCollapsed((v) => !v)}
           >
-            {collapsed ? <ChevronsRight className="size-3.5" /> : <ChevronsLeft className="size-3.5" />}
+            {collapsed ? (
+              <ChevronsRight className="size-3.5" />
+            ) : (
+              <ChevronsLeft className="size-3.5" />
+            )}
           </Button>
         </aside>
 
@@ -228,7 +242,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border glass px-4">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  aria-label="Open navigation"
+                >
                   <Menu className="size-5" />
                 </Button>
               </SheetTrigger>

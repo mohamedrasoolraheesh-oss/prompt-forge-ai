@@ -79,7 +79,8 @@ export function CommandPalette({
               onOpenChange(false);
             }}
           >
-            {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />} Toggle Theme
+            {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />} Toggle
+            Theme
           </CommandItem>
         </CommandGroup>
       </CommandList>

@@ -63,7 +63,9 @@ export function PromptView({
         )}
       >
         {content}
-        {streaming && <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-primary align-middle" />}
+        {streaming && (
+          <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-primary align-middle" />
+        )}
       </pre>
     );
   }

@@ -17,9 +17,15 @@ export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
     meta: [
       { title: "History — Prompt Forge AI" },
-      { name: "description", content: "Every playground run with its model, latency, tokens and full response." },
+      {
+        name: "description",
+        content: "Every playground run with its model, latency, tokens and full response.",
+      },
       { property: "og:title", content: "History — Prompt Forge AI" },
-      { property: "og:description", content: "Every prompt test run, with latency and token stats." },
+      {
+        property: "og:description",
+        content: "Every prompt test run, with latency and token stats.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -49,7 +55,8 @@ function HistoryPage() {
       </header>
 
       <div className="mt-6 space-y-3">
-        {isLoading && Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
+        {isLoading &&
+          Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
         {!isLoading && !data?.length && (
           <EmptyState
             icon={HistoryIcon}
@@ -63,8 +70,12 @@ function HistoryPage() {
               <AccordionItem key={t.id} value={t.id} className="border-0">
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex min-w-0 flex-1 items-center gap-3 pr-3 text-left">
-                    <span className="min-w-0 flex-1 truncate text-sm">{t.prompt_text.slice(0, 90)}</span>
-                    <Badge variant="outline" className="uppercase">{t.model}</Badge>
+                    <span className="min-w-0 flex-1 truncate text-sm">
+                      {t.prompt_text.slice(0, 90)}
+                    </span>
+                    <Badge variant="outline" className="uppercase">
+                      {t.model}
+                    </Badge>
                     <Badge variant="secondary">{t.latency_ms} ms</Badge>
                   </div>
                 </AccordionTrigger>

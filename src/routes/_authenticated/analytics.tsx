@@ -24,9 +24,15 @@ export const Route = createFileRoute("/_authenticated/analytics")({
   head: () => ({
     meta: [
       { title: "Analytics — Prompt Forge AI" },
-      { name: "description", content: "Track prompt quality over time, category mix, model usage and test latency." },
+      {
+        name: "description",
+        content: "Track prompt quality over time, category mix, model usage and test latency.",
+      },
       { property: "og:title", content: "Analytics — Prompt Forge AI" },
-      { property: "og:description", content: "Track prompt quality, category mix and model usage." },
+      {
+        property: "og:description",
+        content: "Track prompt quality, category mix and model usage.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -47,7 +53,10 @@ function Analytics() {
     queryKey: ["analytics"],
     queryFn: async () => {
       const [prompts, tests] = await Promise.all([
-        supabase.from("prompts").select("category, model, quality_score, created_at").order("created_at"),
+        supabase
+          .from("prompts")
+          .select("category, model, quality_score, created_at")
+          .order("created_at"),
         supabase.from("prompt_tests").select("model, latency_ms, created_at").order("created_at"),
       ]);
       return { prompts: prompts.data ?? [], tests: tests.data ?? [] };
@@ -58,13 +67,19 @@ function Analytics() {
     const prompts = data?.prompts ?? [];
     const byDay = new Map<string, { day: string; score: number; count: number }>();
     for (const p of prompts) {
-      const day = new Date(p.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      const day = new Date(p.created_at).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+      });
       const row = byDay.get(day) ?? { day, score: 0, count: 0 };
       row.score += p.quality_score;
       row.count += 1;
       byDay.set(day, row);
     }
-    const quality = [...byDay.values()].map((r) => ({ day: r.day, score: Math.round(r.score / r.count) }));
+    const quality = [...byDay.values()].map((r) => ({
+      day: r.day,
+      score: Math.round(r.score / r.count),
+    }));
 
     const catMap = new Map<string, number>();
     for (const p of prompts) catMap.set(p.category, (catMap.get(p.category) ?? 0) + 1);
@@ -85,7 +100,9 @@ function Analytics() {
   if (isLoading) {
     return (
       <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-8 sm:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-72 rounded-xl" />)}
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-72 rounded-xl" />
+        ))}
       </div>
     );
   }
@@ -123,7 +140,13 @@ function Analytics() {
               <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
               <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
               <Tooltip contentStyle={tooltipStyle} />
-              <Area type="monotone" dataKey="score" stroke="var(--chart-1)" strokeWidth={2} fill="url(#q)" />
+              <Area
+                type="monotone"
+                dataKey="score"
+                stroke="var(--chart-1)"
+                strokeWidth={2}
+                fill="url(#q)"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </Card>
@@ -131,7 +154,14 @@ function Analytics() {
         <Card title="Prompts by category">
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
-              <Pie data={charts.categories} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} paddingAngle={3}>
+              <Pie
+                data={charts.categories}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={55}
+                outerRadius={90}
+                paddingAngle={3}
+              >
                 {charts.categories.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
@@ -146,7 +176,11 @@ function Analytics() {
             <BarChart data={charts.models}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
-              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+              <YAxis
+                allowDecimals={false}
+                tick={{ fontSize: 11 }}
+                stroke="var(--muted-foreground)"
+              />
               <Tooltip contentStyle={tooltipStyle} cursor={{ fill: "var(--muted)" }} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="var(--chart-2)" />
             </BarChart>
@@ -165,7 +199,9 @@ function Analytics() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="py-16 text-center text-sm text-muted-foreground">No playground runs yet.</p>
+            <p className="py-16 text-center text-sm text-muted-foreground">
+              No playground runs yet.
+            </p>
           )}
         </Card>
       </div>

@@ -36,14 +36,27 @@ export function ScoreRing({
 
   return (
     <div className={cn("relative inline-flex items-center justify-center", className)}>
-      <svg width={size} height={size} className="-rotate-90" role="img" aria-label={`Quality score ${score} out of 100`}>
+      <svg
+        width={size}
+        height={size}
+        className="-rotate-90"
+        role="img"
+        aria-label={`Quality score ${score} out of 100`}
+      >
         <defs>
           <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="var(--forge)" />
             <stop offset="100%" stopColor="var(--forge-2)" />
           </linearGradient>
         </defs>
-        <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="stroke-muted" fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          strokeWidth={stroke}
+          className="stroke-muted"
+          fill="none"
+        />
         <circle
           cx={size / 2}
           cy={size / 2}
