@@ -8,17 +8,19 @@ export type ModelKey = "gpt" | "gemini" | "claude" | "custom";
  * transport serves every provider.
  */
 export const PROVIDERS: Record<ModelKey, { label: string; model: string; costPer1k: number }> = {
-  gpt: { label: "GPT", model: "openai/gpt-5.4-mini", costPer1k: 0.0025 },
-  gemini: { label: "Gemini", model: "google/gemini-3.6-flash", costPer1k: 0.0008 },
-  claude: { label: "Claude", model: "google/gemini-3.1-pro-preview", costPer1k: 0.0031 },
-  custom: { label: "Custom", model: "google/gemini-3.5-flash", costPer1k: 0.0006 },
+  gpt: { label: "GPT", model: "gpt-4o-mini", costPer1k: 0.00015 },
+  gemini: { label: "Gemini", model: "gpt-4o-mini", costPer1k: 0.00015 },
+  claude: { label: "Claude", model: "gpt-4o", costPer1k: 0.0025 },
+  custom: { label: "Custom", model: "gpt-4o-mini", costPer1k: 0.00015 },
 };
 
 export function isDemoMode() {
-  return !process.env["LOVABLE_API_KEY"];
+  return !process.env["OPENAI_API_KEY"] && !process.env["AI_API_KEY"];
 }
 
-const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
+/** OpenAI-compatible chat completions endpoint. Override with AI_GATEWAY_URL. */
+const GATEWAY =
+  process.env["AI_GATEWAY_URL"] || "https://api.openai.com/v1/chat/completions";
 
 export class AIError extends Error {
   status: number;
@@ -31,7 +33,7 @@ export class AIError extends Error {
 type Msg = { role: "system" | "user"; content: string };
 
 async function gatewayFetch(model: string, messages: Msg[], opts: Record<string, unknown> = {}) {
-  const key = process.env["LOVABLE_API_KEY"];
+  const key = process.env["OPENAI_API_KEY"] || process.env["AI_API_KEY"];
   const res = await fetch(GATEWAY, {
     method: "POST",
     headers: {
@@ -264,42 +266,7 @@ function demoAnswer(messages: Msg[]): string {
 }
 
 function demoPrompt(idea: string) {
-  return `ROLE
-You are a senior specialist responsible for: ${idea}.
-
-CONTEXT
-The user needs a reliable, repeatable result suitable for professional use.
-Audience: {{audience}}. Tone: {{tone}}.
-
-OBJECTIVE
-Deliver ${idea} at a quality bar that requires no rewriting.
-
-INPUTS
-- {{topic}} — the subject matter to work on
-- {{constraints}} — any hard limits supplied by the user
-
-INSTRUCTIONS
-1. Restate the goal in one sentence before producing output.
-2. Gather the inputs above; if one is missing, ask exactly one clarifying question.
-3. Produce the deliverable in the format defined below.
-4. Verify the result against every quality criterion before responding.
-
-CONSTRAINTS
-- Never invent facts, numbers, or citations.
-- Stay within the supplied constraints.
-- No filler phrases or self-references.
-
-OUTPUT FORMAT
-Markdown with a short summary line, then the deliverable, then a 3-bullet checklist of what was verified.
-
-QUALITY CRITERIA
-- Specific and actionable, not generic
-- Internally consistent
-- Directly usable without editing
-
-EDGE CASES
-- If inputs conflict, surface the conflict instead of guessing.
-- If the request is out of scope, say so and propose the closest valid alternative.`;
+  return `ROLE\nYou are a senior specialist responsible for: ${idea}.\n\nCONTEXT\nThe user needs a reliable, repeatable result suitable for professional use.\nAudience: {{audience}}. Tone: {{tone}}.\n\nOBJECTIVE\nDeliver ${idea} at a quality bar that requires no rewriting.\n\nINPUTS\n- {{topic}} — the subject matter to work on\n- {{constraints}} — any hard limits supplied by the user\n\nINSTRUCTIONS\n1. Restate the goal in one sentence before producing output.\n2. Gather the inputs above; if one is missing, ask exactly one clarifying question.\n3. Produce the deliverable in the format defined below.\n4. Verify the result against every quality criterion before responding.\n\nCONSTRAINTS\n- Never invent facts, numbers, or citations.\n- Stay within the supplied constraints.\n- No filler phrases or self-references.\n\nOUTPUT FORMAT\nMarkdown with a short summary line, then the deliverable, then a 3-bullet checklist of what was verified.\n\nQUALITY CRITERIA\n- Specific and actionable, not generic\n- Internally consistent\n- Directly usable without editing\n\nEDGE CASES\n- If inputs conflict, surface the conflict instead of guessing.\n- If the request is out of scope, say so and propose the closest valid alternative.`;
 }
 
 function demoStream(text: string): ReadableStream<Uint8Array> {
