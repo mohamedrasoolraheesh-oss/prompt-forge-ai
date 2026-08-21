@@ -201,14 +201,7 @@ function PromptDetail() {
             {busy ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
             version
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Delete prompt"
-            onClick={() => void remove()}
-          >
-            <Trash2 className="size-4 text-destructive" />
-          </Button>
+          <ConfirmDelete title={`Delete "${title ?? p.title}"?`} onConfirm={() => remove()} />
         </div>
       </header>
 
