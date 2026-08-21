@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LibraryBig, Search, Star, Trash2 } from "lucide-react";
+import { LibraryBig, Search, Star } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ConfirmDelete } from "@/components/confirm-delete";
 import { ScoreRing } from "@/components/score-ring";
 import { EmptyState } from "@/components/empty-state";
 import { CATEGORIES } from "@/lib/constants";
