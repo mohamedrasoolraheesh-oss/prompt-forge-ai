@@ -132,7 +132,7 @@ function Brand({ collapsed }: { collapsed: boolean }) {
         <Zap className="size-4 text-white" aria-hidden />
       </span>
       {!collapsed && (
-        <span className="font-display text-[15px] font-bold tracking-tight">Prompt Forge</span>
+        <span className="font-display text-[15px] font-bold tracking-tight">Rebel Prompt</span>
       )}
     </Link>
   );

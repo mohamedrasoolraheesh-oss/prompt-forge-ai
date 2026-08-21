@@ -23,12 +23,12 @@ import { EmptyState } from "@/components/empty-state";
 export const Route = createFileRoute("/_authenticated/analytics")({
   head: () => ({
     meta: [
-      { title: "Analytics — Prompt Forge AI" },
+      { title: "Analytics — Rebel Prompt AI" },
       {
         name: "description",
         content: "Track prompt quality over time, category mix, model usage and test latency.",
       },
-      { property: "og:title", content: "Analytics — Prompt Forge AI" },
+      { property: "og:title", content: "Analytics — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Track prompt quality, category mix and model usage.",

@@ -22,13 +22,13 @@ export const Route = createFileRoute("/_authenticated/optimize")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Optimize — Prompt Forge AI" },
+      { title: "Optimize — Rebel Prompt AI" },
       {
         name: "description",
         content:
           "Rewrite and improve any prompt with targeted optimization modes and before/after quality scoring.",
       },
-      { property: "og:title", content: "Optimize — Prompt Forge AI" },
+      { property: "og:title", content: "Optimize — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Improve any prompt with before/after quality scoring.",

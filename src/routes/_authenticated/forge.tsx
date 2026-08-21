@@ -34,13 +34,13 @@ import { useHotkey, modKey } from "@/hooks/useHotkey";
 export const Route = createFileRoute("/_authenticated/forge")({
   head: () => ({
     meta: [
-      { title: "Forge — Prompt Forge AI" },
+      { title: "Forge — Rebel Prompt AI" },
       {
         name: "description",
         content:
           "Turn a rough idea into a structured, production-grade AI prompt with live quality scoring.",
       },
-      { property: "og:title", content: "Forge — Prompt Forge AI" },
+      { property: "og:title", content: "Forge — Rebel Prompt AI" },
       { property: "og:description", content: "Turn rough ideas into production-grade AI prompts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

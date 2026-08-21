@@ -5,13 +5,13 @@ export const Route = createFileRoute("/signup")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Create your account — Prompt Forge AI" },
+      { title: "Create your account — Rebel Prompt AI" },
       {
         name: "description",
         content:
-          "Create a Prompt Forge AI account and start forging production-grade AI prompts in minutes.",
+          "Create a Rebel Prompt AI account and start forging production-grade AI prompts in minutes.",
       },
-      { property: "og:title", content: "Create your account — Prompt Forge AI" },
+      { property: "og:title", content: "Create your account — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Start forging production-grade AI prompts in minutes.",

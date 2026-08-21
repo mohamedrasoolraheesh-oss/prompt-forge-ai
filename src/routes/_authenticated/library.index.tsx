@@ -23,13 +23,13 @@ import { CATEGORIES } from "@/lib/constants";
 export const Route = createFileRoute("/_authenticated/library/")({
   head: () => ({
     meta: [
-      { title: "Library — Prompt Forge AI" },
+      { title: "Library — Rebel Prompt AI" },
       {
         name: "description",
         content:
           "Search, filter and manage every prompt you've forged, with quality scores and version history.",
       },
-      { property: "og:title", content: "Library — Prompt Forge AI" },
+      { property: "og:title", content: "Library — Rebel Prompt AI" },
       { property: "og:description", content: "Search and manage every prompt you've forged." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
