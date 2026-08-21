@@ -5,19 +5,17 @@ import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { nitro } from "nitro/vite";
 
+// Plugin order per TanStack/Vercel docs. Avoid custom server entry on Vite 8.2+
+// (triggers Rolldown __exportAll / ssr_exports bug — TanStack/router#8031).
 export default defineConfig({
   server: {
     port: 3000,
   },
   plugins: [
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
-    tanstackStart({
-      // Use our custom server entry with SSR error handling
-      server: { entry: "server" },
-    }),
-    viteReact(),
     tailwindcss(),
-    // vercel preset emits Build Output API under .vercel/output
+    tanstackStart(),
     nitro({ preset: "vercel" }),
+    viteReact(),
   ],
 });
