@@ -136,7 +136,11 @@ function PromptDetail() {
   }
 
   async function remove() {
-    await supabase.from("prompts").delete().eq("id", p.id);
+    const { error: delErr } = await supabase.from("prompts").delete().eq("id", p.id);
+    if (delErr) {
+      toast.error(delErr.message || "Could not delete that prompt");
+      return;
+    }
     await queryClient.invalidateQueries();
     toast.success("Prompt deleted");
     void navigate({ to: "/library" });
