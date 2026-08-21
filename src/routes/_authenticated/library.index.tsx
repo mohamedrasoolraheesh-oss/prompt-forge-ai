@@ -204,10 +204,7 @@ function LibraryPage() {
                 >
                   <Star className={p.is_favorite ? "size-4 fill-warning text-warning" : "size-4"} />
                 </Button>
-                <ConfirmDelete
-                  title={`Delete "${p.title}"?`}
-                  onConfirm={() => remove(p.id)}
-                />
+                <ConfirmDelete title={`Delete "${p.title}"?`} onConfirm={() => remove(p.id)} />
               </div>
             </div>
           </article>
