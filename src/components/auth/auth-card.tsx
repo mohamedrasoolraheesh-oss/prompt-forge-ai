@@ -78,7 +78,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
         if (error) throw error;
         const { data: session } = await supabase.auth.getSession();
         if (session.session) {
-          toast.success("Account created — welcome to Prompt Forge");
+          toast.success("Account created — welcome to Rebel Prompt");
           void navigate({ to: "/dashboard" });
         } else {
           setSent(true);
@@ -131,7 +131,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
           <span className="grid size-8 place-items-center rounded-lg forge-gradient shadow-glow">
             <Zap className="size-4 text-white" aria-hidden />
           </span>
-          <span className="font-display text-sm font-bold tracking-tight">Prompt Forge AI</span>
+          <span className="font-display text-sm font-bold tracking-tight">Rebel Prompt AI</span>
         </Link>
 
         <h1 className="font-display text-2xl font-bold tracking-tight">{copy.title}</h1>

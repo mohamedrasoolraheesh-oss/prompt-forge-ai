@@ -115,7 +115,7 @@ export async function completeText(
 
 /* ---------------------------------------------------------------- prompts */
 
-const ENGINE_RULES = `You are Prompt Forge, an elite prompt engineer.
+const ENGINE_RULES = `You are Rebel Prompt, an elite prompt engineer.
 You transform a rough user idea into a single production-grade prompt.
 
 The prompt you output MUST use exactly these uppercase section headers, in order,
@@ -256,7 +256,7 @@ function demoAnswer(messages: Msg[]): string {
       suggestions,
     });
   }
-  if (sys.includes("Prompt Forge")) {
+  if (sys.includes("Rebel Prompt")) {
     const idea = user.replace(/^Idea to turn into a prompt:\s*/i, "").trim() || "the task";
     return demoPrompt(idea);
   }

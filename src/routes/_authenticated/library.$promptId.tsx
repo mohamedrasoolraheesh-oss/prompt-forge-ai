@@ -20,12 +20,12 @@ import { SCORE_LABELS, averageScore, scoreLabel, type Breakdown } from "@/lib/co
 export const Route = createFileRoute("/_authenticated/library/$promptId")({
   head: () => ({
     meta: [
-      { title: "Prompt detail — Prompt Forge AI" },
+      { title: "Prompt detail — Rebel Prompt AI" },
       {
         name: "description",
-        content: "Review, edit, re-score and version a saved prompt in your Prompt Forge library.",
+        content: "Review, edit, re-score and version a saved prompt in your Rebel Prompt library.",
       },
-      { property: "og:title", content: "Prompt detail — Prompt Forge AI" },
+      { property: "og:title", content: "Prompt detail — Rebel Prompt AI" },
       { property: "og:description", content: "Review, edit and version a saved prompt." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

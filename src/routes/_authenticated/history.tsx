@@ -16,12 +16,12 @@ import {
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
     meta: [
-      { title: "History — Prompt Forge AI" },
+      { title: "History — Rebel Prompt AI" },
       {
         name: "description",
         content: "Every playground run with its model, latency, tokens and full response.",
       },
-      { property: "og:title", content: "History — Prompt Forge AI" },
+      { property: "og:title", content: "History — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Every prompt test run, with latency and token stats.",

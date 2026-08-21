@@ -23,12 +23,12 @@ import { useProfile } from "@/components/layout/app-shell";
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Prompt Forge AI" },
+      { title: "Settings — Rebel Prompt AI" },
       {
         name: "description",
-        content: "Manage your Prompt Forge profile, default model, prompt style and appearance.",
+        content: "Manage your Rebel Prompt profile, default model, prompt style and appearance.",
       },
-      { property: "og:title", content: "Settings — Prompt Forge AI" },
+      { property: "og:title", content: "Settings — Rebel Prompt AI" },
       { property: "og:description", content: "Manage your profile and prompt defaults." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -142,7 +142,7 @@ function Settings() {
       <section className="panel mt-4 flex items-center justify-between p-6">
         <div>
           <h2 className="font-display text-lg font-semibold">Dark mode</h2>
-          <p className="text-sm text-muted-foreground">Prompt Forge looks best in the dark.</p>
+          <p className="text-sm text-muted-foreground">Rebel Prompt looks best in the dark.</p>
         </div>
         <Switch
           checked={theme === "dark"}

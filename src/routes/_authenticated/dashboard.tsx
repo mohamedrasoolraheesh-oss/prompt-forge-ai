@@ -20,12 +20,12 @@ import { useProfile } from "@/components/layout/app-shell";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Prompt Forge AI" },
+      { title: "Dashboard — Rebel Prompt AI" },
       {
         name: "description",
         content: "Your prompt engineering overview: quality scores, recent prompts and activity.",
       },
-      { property: "og:title", content: "Dashboard — Prompt Forge AI" },
+      { property: "og:title", content: "Dashboard — Rebel Prompt AI" },
       { property: "og:description", content: "Your prompt engineering overview at a glance." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

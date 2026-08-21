@@ -7,10 +7,10 @@ export const Route = createFileRoute("/auth/callback")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Signing you in — Prompt Forge AI" },
-      { name: "description", content: "Completing your Prompt Forge AI sign-in." },
-      { property: "og:title", content: "Signing you in — Prompt Forge AI" },
-      { property: "og:description", content: "Completing your Prompt Forge AI sign-in." },
+      { title: "Signing you in — Rebel Prompt AI" },
+      { name: "description", content: "Completing your Rebel Prompt AI sign-in." },
+      { property: "og:title", content: "Signing you in — Rebel Prompt AI" },
+      { property: "og:description", content: "Completing your Rebel Prompt AI sign-in." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },

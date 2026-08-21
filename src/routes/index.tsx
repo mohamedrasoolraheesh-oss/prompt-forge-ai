@@ -21,13 +21,13 @@ import { useAuth } from "@/hooks/useAuth";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Prompt Forge AI — Engineer prompts that actually work" },
+      { title: "Rebel Prompt AI — Engineer prompts that actually work" },
       {
         name: "description",
         content:
-          "Prompt Forge AI turns rough ideas into structured, production-grade prompts with quality scoring, optimization, versioning and a live testing playground.",
+          "Rebel Prompt AI turns rough ideas into structured, production-grade prompts with quality scoring, optimization, versioning and a live testing playground.",
       },
-      { property: "og:title", content: "Prompt Forge AI — Engineer prompts that actually work" },
+      { property: "og:title", content: "Rebel Prompt AI — Engineer prompts that actually work" },
       {
         property: "og:description",
         content: "Generate, score, optimize and test AI prompts in one premium workspace.",
@@ -55,7 +55,7 @@ A markdown table: severity | file:line | issue | fix`;
 const FEATURES = [
   {
     icon: Sparkles,
-    title: "AI Prompt Forge",
+    title: "AI Prompt Rebel",
     body: "Describe an idea; get a role-, context- and constraint-complete prompt in seconds.",
   },
   {
@@ -131,7 +131,7 @@ function Landing() {
               <Zap className="size-4 text-white" aria-hidden />
             </span>
             <span className="font-display text-[15px] font-bold tracking-tight">
-              Prompt Forge AI
+              Rebel Prompt AI
             </span>
           </Link>
           <nav className="ml-auto flex items-center gap-2">
@@ -175,7 +175,7 @@ function Landing() {
                 that <span className="text-gradient">actually work</span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Prompt Forge AI turns a rough idea into a structured, model-ready prompt — then
+                Rebel Prompt AI turns a rough idea into a structured, model-ready prompt — then
                 scores it, optimizes it, versions it and lets you test it live. No more guesswork.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -299,9 +299,9 @@ function Landing() {
       <footer className="border-t border-border px-4 py-8 sm:px-6">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
-            <Zap className="size-4 text-primary" aria-hidden /> Prompt Forge AI
+            <Zap className="size-4 text-primary" aria-hidden /> Rebel Prompt AI
           </span>
-          <span className="ml-auto">© {new Date().getFullYear()} Prompt Forge AI</span>
+          <span className="ml-auto">© {new Date().getFullYear()} Rebel Prompt AI</span>
         </div>
       </footer>
     </div>

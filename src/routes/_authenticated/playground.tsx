@@ -29,13 +29,13 @@ export const Route = createFileRoute("/_authenticated/playground")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Playground — Prompt Forge AI" },
+      { title: "Playground — Rebel Prompt AI" },
       {
         name: "description",
         content:
           "Run prompts with live variables, tune temperature and tokens, and inspect latency, cost and output.",
       },
-      { property: "og:title", content: "Playground — Prompt Forge AI" },
+      { property: "og:title", content: "Playground — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Test prompts with variables, temperature and token controls.",

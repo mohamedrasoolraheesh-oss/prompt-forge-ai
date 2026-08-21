@@ -23,13 +23,13 @@ import { EmptyState } from "@/components/empty-state";
 export const Route = createFileRoute("/_authenticated/templates")({
   head: () => ({
     meta: [
-      { title: "Templates — Prompt Forge AI" },
+      { title: "Templates — Rebel Prompt AI" },
       {
         name: "description",
         content:
           "A curated library of high-scoring prompt templates for coding, marketing, research and more.",
       },
-      { property: "og:title", content: "Templates — Prompt Forge AI" },
+      { property: "og:title", content: "Templates — Rebel Prompt AI" },
       {
         property: "og:description",
         content: "Curated, high-scoring prompt templates you can use instantly.",
