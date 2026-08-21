@@ -17,6 +17,7 @@ export default defineConfig({
     }),
     viteReact(),
     tailwindcss(),
-    nitro({ preset: "node-server" }),
+    // Let Nitro auto-detect Vercel (or use node-server locally via NITRO_PRESET)
+    nitro(),
   ],
 });
