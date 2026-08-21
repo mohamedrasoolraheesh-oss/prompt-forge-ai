@@ -203,14 +203,10 @@ function LibraryPage() {
                 >
                   <Star className={p.is_favorite ? "size-4 fill-warning text-warning" : "size-4"} />
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  aria-label="Delete prompt"
-                  onClick={() => void remove(p.id)}
-                >
-                  <Trash2 className="size-4 text-destructive" />
-                </Button>
+                <ConfirmDelete
+                  title={`Delete "${p.title}"?`}
+                  onConfirm={() => remove(p.id)}
+                />
               </div>
             </div>
           </article>
