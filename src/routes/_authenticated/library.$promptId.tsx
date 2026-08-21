@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, FlaskConical, History, Loader2, Save, Star, Trash2, Wand2 } from "lucide-react";
+import { ArrowLeft, FlaskConical, History, Loader2, Save, Star, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ConfirmDelete } from "@/components/confirm-delete";
 import { ScoreRing, ScoreBar } from "@/components/score-ring";
 import { PromptView, CopyButton } from "@/components/prompt-view";
 import { ErrorState } from "@/components/empty-state";
@@ -136,7 +137,11 @@ function PromptDetail() {
   }
 
   async function remove() {
-    await supabase.from("prompts").delete().eq("id", p.id);
+    const { error: delErr } = await supabase.from("prompts").delete().eq("id", p.id);
+    if (delErr) {
+      toast.error(delErr.message || "Could not delete that prompt");
+      return;
+    }
     await queryClient.invalidateQueries();
     toast.success("Prompt deleted");
     void navigate({ to: "/library" });
@@ -197,14 +202,7 @@ function PromptDetail() {
             {busy ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />} Save
             version
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Delete prompt"
-            onClick={() => void remove()}
-          >
-            <Trash2 className="size-4 text-destructive" />
-          </Button>
+          <ConfirmDelete title={`Delete "${title ?? p.title}"?`} onConfirm={() => remove()} />
         </div>
       </header>
 

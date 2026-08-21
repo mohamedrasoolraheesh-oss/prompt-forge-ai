@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AuthCard } from "@/components/auth/auth-card";
 
 export const Route = createFileRoute("/signup")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Create your account — Prompt Forge AI" },

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { LibraryBig, Search, Star, Trash2 } from "lucide-react";
+import { LibraryBig, Search, Star } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ConfirmDelete } from "@/components/confirm-delete";
 import { ScoreRing } from "@/components/score-ring";
 import { EmptyState } from "@/components/empty-state";
 import { CATEGORIES } from "@/lib/constants";
@@ -83,7 +84,11 @@ function LibraryPage() {
   }
 
   async function remove(id: string) {
-    await supabase.from("prompts").delete().eq("id", id);
+    const { error } = await supabase.from("prompts").delete().eq("id", id);
+    if (error) {
+      toast.error(error.message || "Could not delete that prompt");
+      return;
+    }
     await queryClient.invalidateQueries();
     toast.success("Prompt deleted");
   }
@@ -199,14 +204,7 @@ function LibraryPage() {
                 >
                   <Star className={p.is_favorite ? "size-4 fill-warning text-warning" : "size-4"} />
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  aria-label="Delete prompt"
-                  onClick={() => void remove(p.id)}
-                >
-                  <Trash2 className="size-4 text-destructive" />
-                </Button>
+                <ConfirmDelete title={`Delete "${p.title}"?`} onConfirm={() => remove(p.id)} />
               </div>
             </div>
           </article>
