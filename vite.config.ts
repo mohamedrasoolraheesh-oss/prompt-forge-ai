@@ -17,7 +17,7 @@ export default defineConfig({
     }),
     viteReact(),
     tailwindcss(),
-    // Let Nitro auto-detect Vercel (or use node-server locally via NITRO_PRESET)
-    nitro(),
+    // vercel preset emits Build Output API under .vercel/output
+    nitro({ preset: "vercel" }),
   ],
 });
