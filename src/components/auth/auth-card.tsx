@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -72,18 +72,12 @@ export function AuthCard({ mode }: { mode: Mode }) {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
-            data: { full_name: name || email.split("@")[0] },
+            data: { full_name: name || undefined },
           },
         });
         if (error) throw error;
-        const { data: session } = await supabase.auth.getSession();
-        if (session.session) {
-          toast.success("Account created — welcome to Rebel Prompt");
-          void navigate({ to: "/dashboard" });
-        } else {
-          setSent(true);
-          toast.success("Check your inbox to confirm your email");
-        }
+        toast.success("Account created — check your email to confirm");
+        void navigate({ to: "/dashboard" });
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -93,7 +87,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
         toast.success("Reset link sent");
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Authentication failed");
+      toast.error(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -102,15 +96,20 @@ export function AuthCard({ mode }: { mode: Mode }) {
   async function onGoogle() {
     setGoogleLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/auth/callback`,
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
-      if (result.error) {
-        toast.error(result.error.message ?? "Google sign-in failed");
+      if (error) {
+        toast.error(error.message ?? "Google sign-in failed");
         return;
       }
-      if (result.redirected) return;
-      // Popup flow (editor preview): the session is already set here.
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
       void navigate({ to: "/auth/callback", replace: true });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed");
@@ -134,60 +133,61 @@ export function AuthCard({ mode }: { mode: Mode }) {
           <span className="font-display text-sm font-bold tracking-tight">Rebel Prompt AI</span>
         </Link>
 
-        <h1 className="font-display text-2xl font-bold tracking-tight">{copy.title}</h1>
+        <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">{copy.title}</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">{copy.subtitle}</p>
 
-        {sent ? (
-          <div className="mt-6 rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
-            Check <span className="font-medium">{email}</span> for the next step.
+        {mode === "forgot" && sent ? (
+          <div className="mt-6 rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+            If an account exists for <span className="font-medium text-foreground">{email}</span>, you
+            will receive a reset link shortly.
           </div>
         ) : (
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
             {mode === "signup" && (
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
-                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ada Lovelace"
+                  placeholder="Your name"
+                  autoComplete="name"
                 />
               </div>
             )}
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                required
-                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
               />
             </div>
             {mode !== "forgot" && (
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Password</Label>
                   {mode === "login" && (
                     <Link
                       to="/forgot-password"
-                      className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                      className="text-xs text-muted-foreground underline-offset-4 hover:underline"
                     >
-                      Forgot?
+                      Forgot password?
                     </Link>
                   )}
                 </div>
                 <Input
                   id="password"
                   type="password"
-                  required
-                  autoComplete={mode === "login" ? "current-password" : "new-password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  autoComplete={mode === "login" ? "current-password" : "new-password"}
+                  required
                 />
               </div>
             )}
