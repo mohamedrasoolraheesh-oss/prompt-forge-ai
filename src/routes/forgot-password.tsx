@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AuthCard } from "@/components/auth/auth-card";
 
 export const Route = createFileRoute("/forgot-password")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Reset password — Prompt Forge AI" },
