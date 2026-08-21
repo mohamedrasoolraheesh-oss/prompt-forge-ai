@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ConfirmDelete } from "@/components/confirm-delete";
 import { ScoreRing, ScoreBar } from "@/components/score-ring";
 import { PromptView, CopyButton } from "@/components/prompt-view";
 import { ErrorState } from "@/components/empty-state";
