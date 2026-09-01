@@ -55,7 +55,7 @@ A markdown table: severity | file:line | issue | fix`;
 const FEATURES = [
   {
     icon: Sparkles,
-    title: "AI Prompt Rebel",
+    title: "AI Prompt Builder",
     body: "Describe an idea; get a role-, context- and constraint-complete prompt in seconds.",
   },
   {
