@@ -33,6 +33,10 @@ export function ScoreRing({
 
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
+  // Scale typography to the ring so small rings never overflow into neighbors
+  const showLabel = label && size >= 72;
+  const numSize = Math.max(10, Math.round(size * 0.3));
+  const labelSize = Math.max(8, Math.round(size * 0.085));
 
   return (
     <div className={cn("relative inline-flex items-center justify-center", className)}>
