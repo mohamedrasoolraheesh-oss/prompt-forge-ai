@@ -1,4 +1,4 @@
-# Prompt Forge AI
+# Rebel Prompt AI
 
 A premium AI prompt engineering platform. Create, improve, transform, test, and organize prompts with a modern workspace inspired by Linear, Vercel, ChatGPT, and Notion.
 
