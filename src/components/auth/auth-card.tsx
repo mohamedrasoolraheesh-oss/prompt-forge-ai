@@ -185,10 +185,21 @@ export function AuthCard({ mode }: { mode: Mode }) {
         <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">{copy.title}</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">{copy.subtitle}</p>
 
-        {mode === "forgot" && sent ? (
+        {sent && (mode === "forgot" || mode === "signup") ? (
           <div className="mt-6 rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
-            If an account exists for <span className="font-medium text-foreground">{email}</span>, you
-            will receive a reset link shortly.
+            {mode === "signup" ? (
+              <>
+                We sent a confirmation link to{" "}
+                <span className="font-medium text-foreground">{email}</span>. Click it to activate
+                your account, then sign in.
+              </>
+            ) : (
+              <>
+                If an account exists for{" "}
+                <span className="font-medium text-foreground">{email}</span>, you will receive a
+                reset link shortly.
+              </>
+            )}
           </div>
         ) : (
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
@@ -229,17 +240,76 @@ export function AuthCard({ mode }: { mode: Mode }) {
                     </Link>
                   )}
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete={mode === "login" ? "current-password" : "new-password"}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="pr-10"
+                    autoComplete={mode === "login" ? "current-password" : "new-password"}
+                    aria-describedby={mode === "signup" ? "password-rules" : undefined}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-2 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="size-4" aria-hidden />
+                    ) : (
+                      <Eye className="size-4" aria-hidden />
+                    )}
+                  </button>
+                </div>
               </div>
             )}
+            {mode === "signup" && (
+              <>
+                <ul
+                  id="password-rules"
+                  className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-3"
+                >
+                  <li className="mb-1 text-xs font-medium text-foreground">
+                    Your password must contain:
+                  </li>
+                  {ruleState.map((r) => (
+                    <li
+                      key={r.label}
+                      className={`flex items-center gap-2 text-xs transition-colors ${
+                        r.ok ? "text-emerald-500" : "text-muted-foreground"
+                      }`}
+                    >
+                      {r.ok ? (
+                        <Check className="size-3.5 shrink-0" aria-hidden />
+                      ) : (
+                        <X className="size-3.5 shrink-0 opacity-60" aria-hidden />
+                      )}
+                      <span>{r.label}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm">Confirm password</Label>
+                  <Input
+                    id="confirm"
+                    type={showPassword ? "text" : "password"}
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    required
+                  />
+                  {confirm.length > 0 && confirm !== password && (
+                    <p className="text-xs text-destructive">Passwords don't match</p>
+                  )}
+                </div>
+              </>
+            )}
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {copy.cta}
