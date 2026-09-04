@@ -263,7 +263,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <button
               onClick={() => setPaletteOpen(true)}
-              className="group flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:max-w-sm"
+              className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-surface text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:px-3 sm:max-w-sm"
               aria-label="Search or run a command"
             >
               <Search className="size-4 shrink-0" aria-hidden />
