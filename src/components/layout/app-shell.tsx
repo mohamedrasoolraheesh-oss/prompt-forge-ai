@@ -263,21 +263,25 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             <button
               onClick={() => setPaletteOpen(true)}
-              className="group flex h-9 flex-1 items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:max-w-sm"
+              className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-surface text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:px-3 sm:max-w-sm"
+              aria-label="Search or run a command"
             >
-              <Search className="size-4" aria-hidden />
-              <span className="flex-1 text-left">Search or run a command…</span>
+              <Search className="size-4 shrink-0" aria-hidden />
+              <span className="hidden min-w-0 flex-1 truncate text-left sm:inline">
+                Search or run a command…
+              </span>
               <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] sm:inline">
                 {modKey()} K
               </kbd>
             </button>
 
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex shrink-0 items-center gap-2">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button asChild size="sm">
+                  <Button asChild size="sm" aria-label="New prompt">
                     <Link to="/forge">
-                      <Sparkles className="size-4" /> New Prompt
+                      <Sparkles className="size-4" />
+                      <span className="hidden sm:inline">New Prompt</span>
                     </Link>
                   </Button>
                 </TooltipTrigger>
