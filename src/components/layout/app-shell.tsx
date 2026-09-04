@@ -267,7 +267,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               aria-label="Search or run a command"
             >
               <Search className="size-4 shrink-0" aria-hidden />
-              <span className="hidden min-w-0 flex-1 truncate text-left xs:inline sm:inline">
+              <span className="hidden min-w-0 flex-1 truncate text-left sm:inline">
                 Search or run a command…
               </span>
               <kbd className="hidden rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] sm:inline">
