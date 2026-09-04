@@ -29,15 +29,31 @@ const COPY: Record<Mode, { title: string; subtitle: string; cta: string }> = {
   },
 };
 
+const PASSWORD_RULES: { label: string; test: (v: string) => boolean }[] = [
+  { label: "At least 8 characters", test: (v) => v.length >= 8 },
+  { label: "One uppercase letter (A–Z)", test: (v) => /[A-Z]/.test(v) },
+  { label: "One lowercase letter (a–z)", test: (v) => /[a-z]/.test(v) },
+  { label: "One number (0–9)", test: (v) => /\d/.test(v) },
+  { label: "One symbol (!@#$…)", test: (v) => /[^A-Za-z0-9]/.test(v) },
+];
+
 export function AuthCard({ mode }: { mode: Mode }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const copy = COPY[mode];
+
+  const ruleState = useMemo(
+    () => PASSWORD_RULES.map((r) => ({ label: r.label, ok: r.test(password) })),
+    [password],
+  );
+  const passwordStrong = ruleState.every((r) => r.ok);
 
   // Already signed in? Don't show the form — go straight to the workspace.
   useEffect(() => {
@@ -52,35 +68,66 @@ export function AuthCard({ mode }: { mode: Mode }) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.includes("@")) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       toast.error("Enter a valid email address");
       return;
     }
-    if (mode !== "forgot" && password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    if (mode === "login" && password.length === 0) {
+      toast.error("Enter your password");
       return;
+    }
+    if (mode === "signup") {
+      if (!passwordStrong) {
+        toast.error("Your password doesn't meet all the requirements yet");
+        return;
+      }
+      if (password !== confirm) {
+        toast.error("Passwords don't match");
+        return;
+      }
     }
     setLoading(true);
     try {
       if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+        if (error) {
+          if (/invalid login credentials/i.test(error.message)) {
+            throw new Error("That email and password don't match an account");
+          }
+          if (/email not confirmed/i.test(error.message)) {
+            throw new Error("Please confirm your email first — check your inbox");
+          }
+          throw error;
+        }
         toast.success("Welcome back");
         void navigate({ to: "/dashboard" });
       } else if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
+        const { data, error } = await supabase.auth.signUp({
+          email: email.trim(),
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: { full_name: name || undefined },
           },
         });
-        if (error) throw error;
-        toast.success("Account created — check your email to confirm");
-        void navigate({ to: "/dashboard" });
+        if (error) {
+          if (/already registered|already been registered/i.test(error.message)) {
+            throw new Error("An account with this email already exists — sign in instead");
+          }
+          throw error;
+        }
+        if (data.session) {
+          toast.success("Account created");
+          void navigate({ to: "/dashboard" });
+        } else {
+          setSent(true);
+          toast.success("Account created — check your email to confirm");
+        }
       } else {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
           redirectTo: `${window.location.origin}/auth/callback`,
         });
         if (error) throw error;
@@ -93,6 +140,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
       setLoading(false);
     }
   }
+
 
   async function onGoogle() {
     setGoogleLoading(true);
