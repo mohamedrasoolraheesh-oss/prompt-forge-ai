@@ -8,19 +8,31 @@ export type ModelKey = "gpt" | "gemini" | "claude" | "custom";
  * transport serves every provider.
  */
 export const PROVIDERS: Record<ModelKey, { label: string; model: string; costPer1k: number }> = {
-  gpt: { label: "GPT", model: "gpt-4o-mini", costPer1k: 0.00015 },
-  gemini: { label: "Gemini", model: "gpt-4o-mini", costPer1k: 0.00015 },
-  claude: { label: "Claude", model: "gpt-4o", costPer1k: 0.0025 },
-  custom: { label: "Custom", model: "gpt-4o-mini", costPer1k: 0.00015 },
+  gpt: { label: "GPT", model: "openai/gpt-5-mini", costPer1k: 0.00025 },
+  gemini: { label: "Gemini", model: "google/gemini-2.5-flash", costPer1k: 0.00015 },
+  claude: { label: "Claude", model: "google/gemini-2.5-pro", costPer1k: 0.0012 },
+  custom: { label: "Custom", model: "google/gemini-2.5-flash", costPer1k: 0.00015 },
 };
 
+function apiKey() {
+  return (
+    process.env["LOVABLE_API_KEY"] ||
+    process.env["OPENAI_API_KEY"] ||
+    process.env["AI_API_KEY"] ||
+    ""
+  );
+}
+
 export function isDemoMode() {
-  return !process.env["OPENAI_API_KEY"] && !process.env["AI_API_KEY"];
+  return !apiKey();
 }
 
 /** OpenAI-compatible chat completions endpoint. Override with AI_GATEWAY_URL. */
-const GATEWAY =
-  process.env["AI_GATEWAY_URL"] || "https://api.openai.com/v1/chat/completions";
+function gatewayUrl() {
+  return (
+    process.env["AI_GATEWAY_URL"] || "https://ai.gateway.lovable.dev/v1/chat/completions"
+  );
+}
 
 export class AIError extends Error {
   status: number;
@@ -33,8 +45,8 @@ export class AIError extends Error {
 type Msg = { role: "system" | "user"; content: string };
 
 async function gatewayFetch(model: string, messages: Msg[], opts: Record<string, unknown> = {}) {
-  const key = process.env["OPENAI_API_KEY"] || process.env["AI_API_KEY"];
-  const res = await fetch(GATEWAY, {
+  const key = apiKey();
+  const res = await fetch(gatewayUrl(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,6 +54,7 @@ async function gatewayFetch(model: string, messages: Msg[], opts: Record<string,
     },
     body: JSON.stringify({ model, messages, ...opts }),
   });
+
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     if (res.status === 429)
