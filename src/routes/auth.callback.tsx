@@ -27,6 +27,18 @@ function safePath(value: string | null): string | null {
   return value;
 }
 
+function readAuthParams() {
+  const search = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const get = (key: string) => search.get(key) ?? hash.get(key);
+  return {
+    code: get("code"),
+    error: get("error"),
+    errorDescription: get("error_description"),
+    errorCode: get("error_code"),
+  };
+}
+
 /** Make sure a profile row exists (covers OAuth users created before the trigger ran). */
 async function ensureProfile() {
   const { data } = await supabase.auth.getUser();
@@ -76,26 +88,62 @@ function AuthCallback() {
       void navigate({ to: target, replace: true });
     }
 
+    async function bootstrap() {
+      const params = readAuthParams();
+
+      if (params.error) {
+        const detail =
+          params.errorDescription?.replace(/\+/g, " ") ||
+          params.errorCode ||
+          params.error;
+        setError(detail);
+        setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
+        return;
+      }
+
+      // PKCE / code flow: explicitly exchange so the session is created even if
+      // detectSessionInUrl races with the first render.
+      if (params.code) {
+        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(
+          params.code,
+        );
+        if (cancelled) return;
+        if (exchangeError) {
+          setError(exchangeError.message || "Could not complete Google sign-in");
+          setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
+          return;
+        }
+        if (data.session) {
+          void finish();
+          return;
+        }
+      }
+
+      const { data } = await supabase.auth.getSession();
+      if (cancelled) return;
+      if (data.session) {
+        void finish();
+      }
+    }
+
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) void finish();
     });
 
-    // The session may already be set by the time this route mounts.
-    void supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void finish();
-    });
+    void bootstrap();
 
-    // Hard stop so the user is never stuck on a spinner.
     const timeout = setTimeout(async () => {
       if (done.current || cancelled) return;
       const { data } = await supabase.auth.getSession();
       if (data.session) {
         void finish();
       } else {
-        setError("We couldn't complete the sign-in. Please try again.");
-        setTimeout(() => void navigate({ to: "/login", replace: true }), 1800);
+        setError(
+          "We couldn't complete the sign-in. Check Supabase redirect URLs and try again.",
+        );
+        setTimeout(() => void navigate({ to: "/login", replace: true }), 2500);
       }
-    }, 6000);
+    }, 10000);
 
     return () => {
       cancelled = true;
@@ -110,7 +158,7 @@ function AuthCallback() {
         <Zap className="size-5 text-white" aria-hidden />
       </span>
       {error ? (
-        <p className="text-sm text-destructive">{error}</p>
+        <p className="max-w-md text-sm text-destructive">{error}</p>
       ) : (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" aria-hidden /> Signing you in…
