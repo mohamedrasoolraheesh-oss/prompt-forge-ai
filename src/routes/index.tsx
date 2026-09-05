@@ -135,6 +135,9 @@ function Landing() {
             </span>
           </Link>
           <nav className="ml-auto flex items-center gap-2">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/pricing">Pricing</Link>
+            </Button>
             {signedIn ? (
               <Button asChild size="sm">
                 <Link to="/dashboard">
@@ -301,6 +304,9 @@ function Landing() {
           <span className="flex items-center gap-2">
             <Zap className="size-4 text-primary" aria-hidden /> Rebel Prompt AI
           </span>
+          <Link to="/pricing" className="underline-offset-4 hover:text-foreground hover:underline">
+            Pricing
+          </Link>
           <span className="ml-auto">© {new Date().getFullYear()} Rebel Prompt AI</span>
         </div>
       </footer>
