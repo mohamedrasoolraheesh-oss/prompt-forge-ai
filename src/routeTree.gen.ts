@@ -15,8 +15,6 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedForgeRouteImport } from './routes/_authenticated/forge'
@@ -57,16 +55,6 @@ const PricingRoute = PricingRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
@@ -138,8 +126,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
-  '/sign-in': typeof SignInRoute
-  '/app': typeof AppRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
@@ -159,8 +145,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
-  '/sign-in': typeof SignInRoute
-  '/app': typeof AppRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/forge': typeof AuthenticatedForgeRoute
@@ -182,8 +166,6 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
-  '/sign-in': typeof SignInRoute
-  '/app': typeof AppRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/forge': typeof AuthenticatedForgeRoute
@@ -205,8 +187,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
-    | '/sign-in'
-    | '/app'
     | '/analytics'
     | '/dashboard'
     | '/forge'
@@ -226,8 +206,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
-    | '/sign-in'
-    | '/app'
     | '/analytics'
     | '/dashboard'
     | '/forge'
@@ -248,8 +226,6 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
-    | '/sign-in'
-    | '/app'
     | '/_authenticated/analytics'
     | '/_authenticated/dashboard'
     | '/_authenticated/forge'
@@ -271,8 +247,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
-  SignInRoute: typeof SignInRoute
-  AppRoute: typeof AppRoute
   ApiAiRoute: typeof ApiAiRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
@@ -319,20 +293,6 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sign-in': {
-      id: '/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/analytics': {
@@ -458,8 +418,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
-  SignInRoute: SignInRoute,
-  AppRoute: AppRoute,
   ApiAiRoute: ApiAiRoute,
   AuthCallbackRoute: AuthCallbackRoute,
 }
