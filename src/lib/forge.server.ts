@@ -46,6 +46,8 @@ type Msg = { role: "system" | "user"; content: string };
 
 async function gatewayFetch(model: string, messages: Msg[], opts: Record<string, unknown> = {}) {
   const key = apiKey();
+  // Newer OpenAI reasoning models reject a custom temperature.
+  if (model.startsWith("openai/")) delete opts["temperature"];
   const res = await fetch(gatewayUrl(), {
     method: "POST",
     headers: {
