@@ -27,20 +27,6 @@ function safePath(value: string | null): string | null {
   return value;
 }
 
-function readAuthParams() {
-  const search = new URLSearchParams(window.location.search);
-  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-  const get = (key: string) => search.get(key) ?? hash.get(key);
-  return {
-    code: get("code"),
-    accessToken: get("access_token"),
-    refreshToken: get("refresh_token"),
-    error: get("error"),
-    errorDescription: get("error_description"),
-    errorCode: get("error_code"),
-  };
-}
-
 /** Make sure a profile row exists (covers OAuth users created before the trigger ran). */
 async function ensureProfile() {
   const { data } = await supabase.auth.getUser();
@@ -76,12 +62,6 @@ function AuthCallback() {
     async function finish() {
       if (done.current) return;
       done.current = true;
-      // Clear tokens from the address bar so they are not left in history.
-      try {
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } catch {
-        /* ignore */
-      }
       try {
         await ensureProfile();
       } catch {
@@ -96,68 +76,16 @@ function AuthCallback() {
       void navigate({ to: target, replace: true });
     }
 
-    async function bootstrap() {
-      const params = readAuthParams();
-
-      if (params.error) {
-        const detail =
-          params.errorDescription?.replace(/\+/g, " ") ||
-          params.errorCode ||
-          params.error;
-        setError(detail);
-        setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
-        return;
-      }
-
-      // Implicit flow: tokens arrive in the URL hash.
-      if (params.accessToken && params.refreshToken) {
-        const { data, error: sessionError } = await supabase.auth.setSession({
-          access_token: params.accessToken,
-          refresh_token: params.refreshToken,
-        });
-        if (cancelled) return;
-        if (sessionError) {
-          setError(sessionError.message || "Could not complete Google sign-in");
-          setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
-          return;
-        }
-        if (data.session) {
-          void finish();
-          return;
-        }
-      }
-
-      // PKCE / code flow.
-      if (params.code) {
-        const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(
-          params.code,
-        );
-        if (cancelled) return;
-        if (exchangeError) {
-          setError(exchangeError.message || "Could not complete Google sign-in");
-          setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
-          return;
-        }
-        if (data.session) {
-          void finish();
-          return;
-        }
-      }
-
-      // Fallback: client may have already parsed the URL.
-      const { data } = await supabase.auth.getSession();
-      if (cancelled) return;
-      if (data.session) {
-        void finish();
-      }
-    }
-
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) void finish();
     });
 
-    void bootstrap();
+    // The session may already be set by the time this route mounts.
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) void finish();
+    });
 
+    // Hard stop so the user is never stuck on a spinner.
     const timeout = setTimeout(async () => {
       if (done.current || cancelled) return;
       const { data } = await supabase.auth.getSession();
@@ -165,9 +93,9 @@ function AuthCallback() {
         void finish();
       } else {
         setError("We couldn't complete the sign-in. Please try again.");
-        setTimeout(() => void navigate({ to: "/login", replace: true }), 2500);
+        setTimeout(() => void navigate({ to: "/login", replace: true }), 1800);
       }
-    }, 12000);
+    }, 6000);
 
     return () => {
       cancelled = true;
@@ -182,7 +110,7 @@ function AuthCallback() {
         <Zap className="size-5 text-white" aria-hidden />
       </span>
       {error ? (
-        <p className="max-w-md text-sm text-destructive">{error}</p>
+        <p className="text-sm text-destructive">{error}</p>
       ) : (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" aria-hidden /> Signing you in…
