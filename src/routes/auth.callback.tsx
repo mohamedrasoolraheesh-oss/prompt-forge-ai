@@ -33,6 +33,8 @@ function readAuthParams() {
   const get = (key: string) => search.get(key) ?? hash.get(key);
   return {
     code: get("code"),
+    accessToken: get("access_token"),
+    refreshToken: get("refresh_token"),
     error: get("error"),
     errorDescription: get("error_description"),
     errorCode: get("error_code"),
@@ -74,6 +76,12 @@ function AuthCallback() {
     async function finish() {
       if (done.current) return;
       done.current = true;
+      // Clear tokens from the address bar so they are not left in history.
+      try {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } catch {
+        /* ignore */
+      }
       try {
         await ensureProfile();
       } catch {
@@ -101,8 +109,25 @@ function AuthCallback() {
         return;
       }
 
-      // PKCE / code flow: explicitly exchange so the session is created even if
-      // detectSessionInUrl races with the first render.
+      // Implicit flow: tokens arrive in the URL hash.
+      if (params.accessToken && params.refreshToken) {
+        const { data, error: sessionError } = await supabase.auth.setSession({
+          access_token: params.accessToken,
+          refresh_token: params.refreshToken,
+        });
+        if (cancelled) return;
+        if (sessionError) {
+          setError(sessionError.message || "Could not complete Google sign-in");
+          setTimeout(() => void navigate({ to: "/login", replace: true }), 3500);
+          return;
+        }
+        if (data.session) {
+          void finish();
+          return;
+        }
+      }
+
+      // PKCE / code flow.
       if (params.code) {
         const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(
           params.code,
@@ -119,6 +144,7 @@ function AuthCallback() {
         }
       }
 
+      // Fallback: client may have already parsed the URL.
       const { data } = await supabase.auth.getSession();
       if (cancelled) return;
       if (data.session) {
@@ -138,12 +164,10 @@ function AuthCallback() {
       if (data.session) {
         void finish();
       } else {
-        setError(
-          "We couldn't complete the sign-in. Check Supabase redirect URLs and try again.",
-        );
+        setError("We couldn't complete the sign-in. Please try again.");
         setTimeout(() => void navigate({ to: "/login", replace: true }), 2500);
       }
-    }, 10000);
+    }, 12000);
 
     return () => {
       cancelled = true;
