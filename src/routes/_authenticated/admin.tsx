@@ -220,17 +220,9 @@ function AdminPage() {
                     <ConfirmDelete
                       title="Remove this account?"
                       description={`${u.email} and all of their prompts will be permanently deleted.`}
+                      label={`Delete ${u.email}`}
                       onConfirm={() => deleteMutation.mutate(u.id)}
-                    >
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-8 text-destructive"
-                        aria-label={`Delete ${u.email}`}
-                      >
-                        <Trash2 className="size-4" />
-                      </Button>
-                    </ConfirmDelete>
+                    />
                   </td>
                 </tr>
               ))}
