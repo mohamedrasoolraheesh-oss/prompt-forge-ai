@@ -85,9 +85,13 @@ export function useProfile() {
 
 function NavLinks({ collapsed, onNavigate }: { collapsed: boolean; onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAdmin } = useIsAdmin();
+  const items = isAdmin
+    ? [...NAV, { to: "/admin" as const, label: "Admin", icon: ShieldCheck }]
+    : NAV;
   return (
     <nav className="flex flex-col gap-1 px-3" aria-label="Main">
-      {NAV.map(({ to, label, icon: Icon }) => {
+      {items.map(({ to, label, icon: Icon }) => {
         const active = pathname === to || pathname.startsWith(`${to}/`);
         const link = (
           <Link
