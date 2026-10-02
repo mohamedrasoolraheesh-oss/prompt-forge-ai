@@ -5,6 +5,27 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { createRazorpayOrder, verifyRazorpayPayment } from "@/lib/payments.functions";
+
+declare global {
+  interface Window {
+    Razorpay?: new (opts: Record<string, unknown>) => { open: () => void; on: (e: string, cb: (r: unknown) => void) => void };
+  }
+}
+
+function loadRazorpay(): Promise<boolean> {
+  if (typeof window === "undefined") return Promise.resolve(false);
+  if (window.Razorpay) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    const s = document.createElement("script");
+    s.src = "https://checkout.razorpay.com/v1/checkout.js";
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.body.appendChild(s);
+  });
+}
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -58,8 +79,8 @@ const TIERS: Tier[] = [
     id: "pro",
     name: "Pro",
     tagline: "For people who ship prompts every day.",
-    monthly: 19,
-    yearly: 15,
+    monthly: 1499,
+    yearly: 1199,
     cta: "Upgrade to Pro",
     featured: true,
     features: [
@@ -76,8 +97,8 @@ const TIERS: Tier[] = [
     id: "team",
     name: "Team",
     tagline: "For teams standardizing on one prompt library.",
-    monthly: 49,
-    yearly: 39,
+    monthly: 3999,
+    yearly: 3199,
     cta: "Upgrade to Team",
     features: [
       "Everything in Pro, per seat",
@@ -126,6 +147,9 @@ function PricingPage() {
   const navigate = useNavigate();
   const [yearly, setYearly] = useState(false);
   const [pending, setPending] = useState<string | null>(null);
+  const createOrder = useServerFn(createRazorpayOrder);
+  const verify = useServerFn(verifyRazorpayPayment);
+  const qc = useQueryClient();
 
   async function onCheckout(tier: Tier) {
     if (tier.id === "starter") {
@@ -139,10 +163,37 @@ function PricingPage() {
     }
     setPending(tier.id);
     try {
-      await new Promise((r) => setTimeout(r, 500));
-      toast.info(
-        `Checkout for ${tier.name} isn't connected to a payment provider yet — connect one to take live payments.`,
-      );
+      const ok = await loadRazorpay();
+      if (!ok || !window.Razorpay) throw new Error("Couldn't load the payment window. Check your connection.");
+      const order = await createOrder({
+        data: { plan: tier.id as "pro" | "team", cycle: yearly ? "yearly" : "monthly" },
+      });
+      const rzp = new window.Razorpay({
+        key: order.keyId,
+        order_id: order.orderId,
+        amount: order.amountInr * 100,
+        currency: "INR",
+        name: "Rebel Prompt AI",
+        description: `${order.planName} plan (${yearly ? "yearly" : "monthly"})`,
+        prefill: { email: session?.user.email ?? "" },
+        theme: { color: "#7c3aed" },
+        handler: async (r: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
+          try {
+            await verify({
+              data: { orderId: r.razorpay_order_id, paymentId: r.razorpay_payment_id, signature: r.razorpay_signature },
+            });
+            toast.success(`Payment received — you're on ${order.planName} now!`);
+            void qc.invalidateQueries();
+            void navigate({ to: "/dashboard" });
+          } catch (e) {
+            toast.error((e as Error).message);
+          }
+        },
+      });
+      rzp.on("payment.failed", () => toast.error("Payment failed — no money was taken."));
+      rzp.open();
+    } catch (e) {
+      toast.error((e as Error).message);
     } finally {
       setPending(null);
     }
@@ -243,7 +294,7 @@ function PricingPage() {
                   <p className="mt-1 text-sm text-muted-foreground">{tier.tagline}</p>
                   <p className="mt-5 flex items-end gap-1">
                     <span className="font-display text-4xl font-bold tracking-tight">
-                      ${price}
+                      ₹{price.toLocaleString("en-IN")}
                     </span>
                     <span className="pb-1 text-sm text-muted-foreground">
                       {price === 0 ? "forever" : "/ month"}
