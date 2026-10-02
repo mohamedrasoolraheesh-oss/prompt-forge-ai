@@ -4,8 +4,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /** Plans that can be bought, priced in Indian rupees. */
 export const PLANS = {
-  pro: { name: "Pro", monthly: 1499, yearly: 14390 },
-  team: { name: "Team", monthly: 3999, yearly: 38390 },
+  pro: { name: "Pro", monthly: 1499, yearly: 14388 },
+  team: { name: "Team", monthly: 3999, yearly: 38388 },
 } as const;
 
 export type PlanId = keyof typeof PLANS;

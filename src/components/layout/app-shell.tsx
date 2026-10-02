@@ -14,6 +14,7 @@ import {
   Moon,
   Search,
   Settings,
+  ShieldCheck,
   Gem,
   Sparkles,
   Sun,
@@ -38,6 +39,7 @@ import { CommandPalette } from "@/components/layout/command-palette";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
