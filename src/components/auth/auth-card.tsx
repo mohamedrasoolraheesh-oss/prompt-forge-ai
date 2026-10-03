@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { Check, Eye, EyeOff, Loader2, X, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -40,6 +40,7 @@ const PASSWORD_RULES: { label: string; test: (v: string) => boolean }[] = [
 
 export function AuthCard({ mode }: { mode: Mode }) {
   const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -62,10 +63,18 @@ export function AuthCard({ mode }: { mode: Mode }) {
     void supabase.auth.getSession().then(({ data }) => {
       if (!cancelled && data.session) void navigate({ to: "/dashboard", replace: true });
     });
+    // Download the dashboard screen in the background while the user types,
+    // so it opens instantly the moment sign-in succeeds.
+    try {
+      const dash = router.routesByPath["/dashboard"];
+      if (dash) void router.loadRouteChunk(dash).catch(() => {});
+    } catch {
+      /* non-fatal */
+    }
     return () => {
       cancelled = true;
     };
-  }, [navigate]);
+  }, [navigate, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,8 +112,8 @@ export function AuthCard({ mode }: { mode: Mode }) {
           }
           throw error;
         }
+        void navigate({ to: "/dashboard", replace: true });
         toast.success("Welcome back");
-        void navigate({ to: "/dashboard" });
       } else if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
