@@ -62,11 +62,10 @@ function AuthCallback() {
     async function finish() {
       if (done.current) return;
       done.current = true;
-      try {
-        await ensureProfile();
-      } catch {
+      // Run in the background — don't make the user wait on extra network calls.
+      void ensureProfile().catch(() => {
         /* non-fatal — the app creates the profile lazily too */
-      }
+      });
       if (cancelled) return;
       const target =
         safePath(new URLSearchParams(window.location.search).get("redirect")) ??
