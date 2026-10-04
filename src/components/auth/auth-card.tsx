@@ -66,7 +66,7 @@ export function AuthCard({ mode }: { mode: Mode }) {
     // Download the dashboard screen in the background while the user types,
     // so it opens instantly the moment sign-in succeeds.
     try {
-      const dash = router.routesByPath["/dashboard"];
+      const dash = (router.routesByPath as Record<string, Parameters<typeof router.loadRouteChunk>[0] | undefined>)["/dashboard"];
       if (dash) void router.loadRouteChunk(dash).catch(() => {});
     } catch {
       /* non-fatal */
