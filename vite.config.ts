@@ -1,19 +1,7 @@
-import { defineConfig } from "vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import tsConfigPaths from "vite-tsconfig-paths";
+// @lovable.dev/vite-tanstack-config already includes tanstackStart, viteReact, tailwindcss,
+// tsConfigPaths, nitro (build-only, Cloudflare target used by the hosting), env injection,
+// the @ alias and sandbox port detection. Do NOT add those plugins manually.
+// The hosting pipeline requires this wrapper — removing it breaks publishing.
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-// Avoid custom server entry on Vite 8.2+
-// (triggers Rolldown __exportAll / ssr_exports bug — TanStack/router#8031).
-export default defineConfig({
-  server: {
-    port: 3000,
-  },
-  plugins: [
-    tsConfigPaths({ projects: ["./tsconfig.json"] }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact(),
-  ],
-});
+export default defineConfig({});
