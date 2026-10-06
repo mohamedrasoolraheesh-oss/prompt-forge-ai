@@ -122,6 +122,7 @@ function AdminPage() {
   const fetchOverview = useServerFn(adminOverview);
   const qc = useQueryClient();
   const [q, setQ] = useState("");
+  const [portalId, setPortalId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["admin-overview"],
