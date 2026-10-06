@@ -2,7 +2,14 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { IndianRupee, Loader2, ShieldCheck, Sparkles, Users } from "lucide-react";
+import {
+  FileText,
+  IndianRupee,
+  Loader2,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -46,10 +53,75 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
+type PaymentRow = {
+  id: string;
+  user_id: string;
+  plan: string;
+  billing_cycle: string;
+  amount_inr: number;
+  status: string;
+  razorpay_order_id: string | null;
+  razorpay_payment_id: string | null;
+  created_at: string;
+};
+
+const invoiceNumber = (p: PaymentRow) => `RPF-${p.id.slice(0, 8).toUpperCase()}`;
+
+/** Open a printable invoice for one payment in a new tab. */
+function openInvoice(p: PaymentRow, customer: { name: string; email: string }) {
+  const w = window.open("", "_blank", "width=760,height=900");
+  if (!w) {
+    toast.error("Allow pop-ups to view invoices.");
+    return;
+  }
+  const date = new Date(p.created_at).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  w.document.write(`<!doctype html>
+<html><head><meta charset="utf-8"><title>Invoice ${invoiceNumber(p)}</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;color:#18181b;margin:0;padding:48px;background:#fff}
+  .wrap{max-width:640px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #7c3aed;padding-bottom:24px}
+  h1{font-size:22px;margin:0}
+  .brand{font-size:13px;color:#7c3aed;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .meta{text-align:right;font-size:13px;color:#52525b}
+  table{width:100%;border-collapse:collapse;margin-top:32px;font-size:14px}
+  th{text-align:left;color:#71717a;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:1px solid #e4e4e7}
+  td{padding:12px 0;border-bottom:1px solid #f4f4f5}
+  .total td{font-weight:700;font-size:16px;border-bottom:none}
+  .foot{margin-top:40px;font-size:12px;color:#a1a1aa}
+  .paid{display:inline-block;background:#dcfce7;color:#166534;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+  @media print{body{padding:0}}
+</style></head><body><div class="wrap">
+  <div class="top">
+    <div><p class="brand">Rebel Prompt AI</p><h1>Invoice ${invoiceNumber(p)}</h1></div>
+    <div class="meta">
+      <p>${date}</p>
+      <p>Status: <span class="paid">${p.status.toUpperCase()}</span></p>
+      ${p.razorpay_payment_id ? `<p>Ref: ${p.razorpay_payment_id}</p>` : ""}
+    </div>
+  </div>
+  <p style="margin-top:24px;font-size:14px"><strong>Billed to:</strong><br>${customer.name}<br>${customer.email}</p>
+  <table>
+    <thead><tr><th>Description</th><th>Cycle</th><th style="text-align:right">Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Rebel Prompt AI — ${p.plan} plan</td><td style="text-transform:capitalize">${p.billing_cycle}</td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
+      <tr class="total"><td>Total</td><td></td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
+    </tbody>
+  </table>
+  <p class="foot">Thank you for using Rebel Prompt AI. This is a computer-generated invoice.</p>
+</div><script>window.onload=()=>window.print()</script></body></html>`);
+  w.document.close();
+}
+
 function AdminPage() {
   const fetchOverview = useServerFn(adminOverview);
   const qc = useQueryClient();
   const [q, setQ] = useState("");
+  const [portalId, setPortalId] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["admin-overview"],
@@ -234,6 +306,145 @@ function AdminPage() {
               )}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="font-display text-lg font-semibold">Customer portal</h2>
+        <p className="text-sm text-muted-foreground">
+          Pick a customer to see their plan, payment history and invoices.
+        </p>
+        <div className="grid gap-4 lg:grid-cols-[280px_1fr]">
+          <div className="max-h-96 space-y-1 overflow-y-auto rounded-xl border border-border bg-card p-2">
+            {users.map((u) => (
+              <button
+                key={u.id}
+                type="button"
+                onClick={() => setPortalId(u.id)}
+                className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                  portalId === u.id
+                    ? "bg-primary/10 text-foreground"
+                    : "text-muted-foreground hover:bg-muted/60"
+                }`}
+              >
+                <span className="block truncate font-medium text-foreground">{u.full_name}</span>
+                <span className="block truncate text-xs">{u.email}</span>
+              </button>
+            ))}
+            {users.length === 0 && (
+              <p className="px-3 py-6 text-center text-xs text-muted-foreground">
+                No customers found.
+              </p>
+            )}
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-5">
+            {(() => {
+              const customer = users.find((u) => u.id === portalId) ?? users[0];
+              if (!customer) {
+                return (
+                  <p className="py-10 text-center text-sm text-muted-foreground">
+                    No customers yet.
+                  </p>
+                );
+              }
+              const theirPayments = (data.payments as PaymentRow[]).filter(
+                (p) => p.user_id === customer.id,
+              );
+              return (
+                <div className="space-y-5">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-display text-lg font-semibold">
+                        {customer.full_name}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">{customer.email}</p>
+                    </div>
+                    <Badge variant="outline" className="ml-auto border-primary/30 bg-primary/10">
+                      {customer.plan}
+                    </Badge>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-xs text-muted-foreground">Customer since</p>
+                      <p className="mt-1 text-sm font-medium">
+                        {new Date(customer.created_at).toLocaleDateString("en-IN")}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-xs text-muted-foreground">Total paid</p>
+                      <p className="mt-1 text-sm font-medium tabular-nums">
+                        {inr(customer.paid_inr)}
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-xs text-muted-foreground">Payments</p>
+                      <p className="mt-1 text-sm font-medium tabular-nums">
+                        {theirPayments.length}
+                      </p>
+                    </div>
+                  </div>
+
+                  {theirPayments.length === 0 ? (
+                    <p className="rounded-lg border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
+                      No payments yet for this customer.
+                    </p>
+                  ) : (
+                    <div className="overflow-x-auto rounded-lg border border-border">
+                      <table className="w-full min-w-[560px] text-sm">
+                        <thead className="bg-muted/40 text-left text-xs text-muted-foreground">
+                          <tr>
+                            <th className="px-4 py-2.5 font-medium">Invoice</th>
+                            <th className="px-4 py-2.5 font-medium">Date</th>
+                            <th className="px-4 py-2.5 font-medium">Plan</th>
+                            <th className="px-4 py-2.5 font-medium">Amount</th>
+                            <th className="px-4 py-2.5 font-medium">Status</th>
+                            <th className="px-4 py-2.5 font-medium sr-only">Invoice</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {theirPayments.map((p) => (
+                            <tr key={p.id} className="border-t border-border">
+                              <td className="px-4 py-2.5 font-mono text-xs">
+                                {invoiceNumber(p)}
+                              </td>
+                              <td className="px-4 py-2.5">
+                                {new Date(p.created_at).toLocaleDateString("en-IN")}
+                              </td>
+                              <td className="px-4 py-2.5">
+                                {p.plan} · <span className="capitalize">{p.billing_cycle}</span>
+                              </td>
+                              <td className="px-4 py-2.5 tabular-nums">{inr(p.amount_inr)}</td>
+                              <td className="px-4 py-2.5">
+                                <Badge variant={p.status === "paid" ? "default" : "outline"}>
+                                  {p.status}
+                                </Badge>
+                              </td>
+                              <td className="px-4 py-2.5 text-right">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    openInvoice(p, {
+                                      name: customer.full_name,
+                                      email: customer.email,
+                                    })
+                                  }
+                                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-muted/60"
+                                  aria-label={`Open invoice ${invoiceNumber(p)}`}
+                                >
+                                  <FileText className="size-3.5" aria-hidden /> Invoice
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+          </div>
         </div>
       </section>
 
