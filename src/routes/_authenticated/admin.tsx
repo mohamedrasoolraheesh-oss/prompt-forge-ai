@@ -6,7 +6,6 @@ import {
   FileText,
   IndianRupee,
   Loader2,
-  Receipt,
   ShieldCheck,
   Sparkles,
   Users,
