@@ -54,6 +54,70 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
+type PaymentRow = {
+  id: string;
+  user_id: string;
+  plan: string;
+  billing_cycle: string;
+  amount_inr: number;
+  status: string;
+  razorpay_order_id: string | null;
+  razorpay_payment_id: string | null;
+  created_at: string;
+};
+
+const invoiceNumber = (p: PaymentRow) => `RPF-${p.id.slice(0, 8).toUpperCase()}`;
+
+/** Open a printable invoice for one payment in a new tab. */
+function openInvoice(p: PaymentRow, customer: { name: string; email: string }) {
+  const w = window.open("", "_blank", "width=760,height=900");
+  if (!w) {
+    toast.error("Allow pop-ups to view invoices.");
+    return;
+  }
+  const date = new Date(p.created_at).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  w.document.write(`<!doctype html>
+<html><head><meta charset="utf-8"><title>Invoice ${invoiceNumber(p)}</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;color:#18181b;margin:0;padding:48px;background:#fff}
+  .wrap{max-width:640px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #7c3aed;padding-bottom:24px}
+  h1{font-size:22px;margin:0}
+  .brand{font-size:13px;color:#7c3aed;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+  .meta{text-align:right;font-size:13px;color:#52525b}
+  table{width:100%;border-collapse:collapse;margin-top:32px;font-size:14px}
+  th{text-align:left;color:#71717a;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:8px 0;border-bottom:1px solid #e4e4e7}
+  td{padding:12px 0;border-bottom:1px solid #f4f4f5}
+  .total td{font-weight:700;font-size:16px;border-bottom:none}
+  .foot{margin-top:40px;font-size:12px;color:#a1a1aa}
+  .paid{display:inline-block;background:#dcfce7;color:#166534;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+  @media print{body{padding:0}}
+</style></head><body><div class="wrap">
+  <div class="top">
+    <div><p class="brand">Rebel Prompt AI</p><h1>Invoice ${invoiceNumber(p)}</h1></div>
+    <div class="meta">
+      <p>${date}</p>
+      <p>Status: <span class="paid">${p.status.toUpperCase()}</span></p>
+      ${p.razorpay_payment_id ? `<p>Ref: ${p.razorpay_payment_id}</p>` : ""}
+    </div>
+  </div>
+  <p style="margin-top:24px;font-size:14px"><strong>Billed to:</strong><br>${customer.name}<br>${customer.email}</p>
+  <table>
+    <thead><tr><th>Description</th><th>Cycle</th><th style="text-align:right">Amount</th></tr></thead>
+    <tbody>
+      <tr><td>Rebel Prompt AI — ${p.plan} plan</td><td style="text-transform:capitalize">${p.billing_cycle}</td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
+      <tr class="total"><td>Total</td><td></td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
+    </tbody>
+  </table>
+  <p class="foot">Thank you for using Rebel Prompt AI. This is a computer-generated invoice.</p>
+</div><script>window.onload=()=>window.print()</script></body></html>`);
+  w.document.close();
+}
+
 function AdminPage() {
   const fetchOverview = useServerFn(adminOverview);
   const qc = useQueryClient();
