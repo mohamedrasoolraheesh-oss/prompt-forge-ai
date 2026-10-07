@@ -4,6 +4,7 @@ import {
   BarChart3,
   ChevronsLeft,
   ChevronsRight,
+  CreditCard,
   FlaskConical,
   History,
   LayoutDashboard,
