@@ -143,10 +143,10 @@ function BillingPage() {
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Current plan
               </p>
-              <p className="mt-1 flex items-center gap-2 font-display text-xl font-bold">
+              <div className="mt-1 flex items-center gap-2 font-display text-xl font-bold">
                 {profile?.plan ?? "Free"}
                 <Badge variant="secondary">active</Badge>
-              </p>
+              </div>
               <p className="mt-1 text-sm text-muted-foreground">
                 {profile?.email}
               </p>
