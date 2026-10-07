@@ -51,6 +51,7 @@ const NAV = [
   { to: "/history", label: "History", icon: History },
   { to: "/analytics", label: "Analytics", icon: BarChart3 },
   { to: "/settings", label: "Settings", icon: Settings },
+  { to: "/billing", label: "Billing", icon: CreditCard },
   { to: "/pricing", label: "Pricing", icon: Gem },
 ];
 
