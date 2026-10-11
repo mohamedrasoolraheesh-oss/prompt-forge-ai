@@ -1,0 +1,3 @@
+- Add a persistent customer support ticket table with owner-scoped access.
+- Build a signed-in Support page for submitting questions and reviewing ticket status.
+- Add Support navigation and verify the signed-in flow and page metadata.
