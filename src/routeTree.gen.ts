@@ -24,6 +24,7 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedPlaygroundRouteImport } from './routes/_authenticated/playground'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -104,6 +105,11 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/playground': typeof AuthenticatedPlaygroundRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/support': typeof AuthenticatedSupportRoute
   '/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
   '/_authenticated/playground': typeof AuthenticatedPlaygroundRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/api/ai': typeof ApiAiRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/optimize'
     | '/playground'
     | '/settings'
+    | '/support'
     | '/templates'
     | '/api/ai'
     | '/auth/callback'
@@ -235,6 +245,7 @@ export interface FileRouteTypes {
     | '/optimize'
     | '/playground'
     | '/settings'
+    | '/support'
     | '/templates'
     | '/api/ai'
     | '/auth/callback'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
     | '/_authenticated/optimize'
     | '/_authenticated/playground'
     | '/_authenticated/settings'
+    | '/_authenticated/support'
     | '/_authenticated/templates'
     | '/api/ai'
     | '/auth/callback'
@@ -382,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates': {
       id: '/_authenticated/templates'
       path: '/templates'
@@ -430,6 +449,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
   AuthenticatedPlaygroundRoute: typeof AuthenticatedPlaygroundRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
   AuthenticatedLibraryPromptIdRoute: typeof AuthenticatedLibraryPromptIdRoute
   AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
@@ -445,6 +465,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
   AuthenticatedPlaygroundRoute: AuthenticatedPlaygroundRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
   AuthenticatedLibraryPromptIdRoute: AuthenticatedLibraryPromptIdRoute,
   AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
