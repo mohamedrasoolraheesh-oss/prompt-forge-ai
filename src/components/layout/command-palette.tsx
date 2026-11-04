@@ -18,6 +18,7 @@ import {
   Sun,
   Wand2,
   LayoutTemplate,
+  LifeBuoy,
   Search,
 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
@@ -69,6 +70,9 @@ export function CommandPalette({
           </CommandItem>
           <CommandItem onSelect={() => go("/settings")}>
             <Settings className="size-4" /> Settings
+          </CommandItem>
+          <CommandItem onSelect={() => go("/support")}>
+            <LifeBuoy className="size-4" /> Support
           </CommandItem>
         </CommandGroup>
         <CommandSeparator />

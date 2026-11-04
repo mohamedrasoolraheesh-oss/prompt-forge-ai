@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -79,7 +79,7 @@ function SupportPage() {
     onError: (error: Error) => toast.error(error.message || "Could not submit your request."),
   });
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (subject.trim().length < 5 || message.trim().length < 20) {
       toast.error("Add a subject and at least 20 characters describing your question.");

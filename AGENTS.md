@@ -8,3 +8,4 @@ This is a TanStack Start + Supabase application.
 - AI calls go through `src/lib/forge.server.ts` (OpenAI-compatible gateway).
 
 - Keep `vite.config.ts` on `@lovable.dev/vite-tanstack-config` (no manual nitro/Vercel presets) — the hosting publish pipeline depends on it; removing it silently breaks live deploys.
+- Keep support requests behind authenticated server functions and owner-scoped database policies so private tickets stay protected outside the page UI.

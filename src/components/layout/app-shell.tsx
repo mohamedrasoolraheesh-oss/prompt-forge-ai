@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LayoutTemplate,
   LibraryBig,
+  LifeBuoy,
   LogOut,
   Menu,
   Moon,
@@ -54,6 +55,7 @@ const NAV = [
   { to: "/settings", label: "Settings", icon: Settings },
   { to: "/billing", label: "Billing", icon: CreditCard },
   { to: "/pricing", label: "Pricing", icon: Gem },
+  { to: "/support", label: "Support", icon: LifeBuoy },
 ];
 
 export function useProfile() {
