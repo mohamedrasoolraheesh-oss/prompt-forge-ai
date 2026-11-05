@@ -9,9 +9,9 @@ function validateTicketInput(input: unknown) {
   }
 
   const values = input as Record<string, unknown>;
-  const subject = typeof values.subject === "string" ? values.subject.trim() : "";
-  const message = typeof values.message === "string" ? values.message.trim() : "";
-  const category = values.category;
+  const subject = typeof values["subject"] === "string" ? values["subject"].trim() : "";
+  const message = typeof values["message"] === "string" ? values["message"].trim() : "";
+  const category = values["category"];
 
   if (subject.length < 5 || subject.length > 120) {
     throw new Error("Subject must be between 5 and 120 characters.");
