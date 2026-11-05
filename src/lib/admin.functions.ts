@@ -44,12 +44,13 @@ export const adminOverview = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const [profiles, roles, prompts, tests, payments] = await Promise.all([
+    const [profiles, roles, prompts, tests, payments, supportTickets] = await Promise.all([
       supabaseAdmin.from("profiles").select("*").order("created_at", { ascending: false }),
       supabaseAdmin.from("user_roles").select("user_id, role"),
       supabaseAdmin.from("prompts").select("id, user_id, quality_score, created_at"),
       supabaseAdmin.from("prompt_tests").select("id, user_id, cost, created_at"),
       supabaseAdmin.from("payments").select("*").order("created_at", { ascending: false }),
+      supabaseAdmin.from("support_tickets").select("*").order("created_at", { ascending: false }),
     ]);
 
     const roleOf = new Map<string, "admin" | "user">();
@@ -89,6 +90,7 @@ export const adminOverview = createServerFn({ method: "GET" })
     return {
       users,
       payments: payments.data ?? [],
+      supportTickets: supportTickets.data ?? [],
       stats: {
         users: users.length,
         prompts: prompts.data?.length ?? 0,
@@ -98,6 +100,27 @@ export const adminOverview = createServerFn({ method: "GET" })
         paidCount: (payments.data ?? []).filter((p) => p.status === "paid").length,
       },
     };
+  });
+
+/** Update ticket status after verifying the caller's protected admin role. */
+export const updateSupportTicketStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { ticketId: string; status: "open" | "in_progress" | "resolved" }) => {
+    if (!/^[0-9a-f-]{36}$/i.test(input.ticketId)) throw new Error("Invalid request.");
+    if (!( ["open", "in_progress", "resolved"] as const).includes(input.status)) {
+      throw new Error("Choose a valid status.");
+    }
+    return input;
+  })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("support_tickets")
+      .update({ status: data.status })
+      .eq("id", data.ticketId);
+    if (error) throw new Error("Could not update the support request.");
+    return { ok: true };
   });
 
 /** Promote or demote a user. The owner account can never lose admin. */

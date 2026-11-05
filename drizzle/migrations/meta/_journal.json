@@ -8,6 +8,13 @@
       "when": 1791707371687,
       "tag": "0000_create_support_tickets",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793878051489,
+      "tag": "0001_restrict_support_ticket_writes",
+      "breakpoints": true
     }
   ]
 }
