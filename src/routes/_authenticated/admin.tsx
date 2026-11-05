@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import {
   FileText,
   IndianRupee,
+  LifeBuoy,
   Loader2,
   ShieldCheck,
   Sparkles,
@@ -28,6 +29,7 @@ import {
   deleteUser,
   setUserPlan,
   setUserRole,
+  updateSupportTicketStatus,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -132,6 +134,7 @@ function AdminPage() {
   const roleFn = useServerFn(setUserRole);
   const planFn = useServerFn(setUserPlan);
   const deleteFn = useServerFn(deleteUser);
+  const ticketStatusFn = useServerFn(updateSupportTicketStatus);
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-overview"] });
 
@@ -155,6 +158,15 @@ function AdminPage() {
     mutationFn: (userId: string) => deleteFn({ data: { userId } }),
     onSuccess: () => {
       toast.success("Account removed");
+      invalidate();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const ticketStatusMutation = useMutation({
+    mutationFn: (v: { ticketId: string; status: "open" | "in_progress" | "resolved" }) =>
+      ticketStatusFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Support request updated");
       invalidate();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -446,6 +458,68 @@ function AdminPage() {
             })()}
           </div>
         </div>
+      </section>
+
+      <section className="space-y-3">
+        <div className="flex items-center gap-2">
+          <LifeBuoy className="size-4 text-primary" aria-hidden />
+          <h2 className="font-display text-lg font-semibold">Support requests</h2>
+          <Badge variant="secondary" className="ml-auto">
+            {data.supportTickets.filter((ticket) => ticket.status !== "resolved").length} open
+          </Badge>
+        </div>
+        {data.supportTickets.length === 0 ? (
+          <div className="border-y border-border py-8 text-center text-sm text-muted-foreground">
+            No support requests have been submitted.
+          </div>
+        ) : (
+          <div className="divide-y divide-border border-y border-border">
+            {data.supportTickets.map((ticket) => {
+              const customer = users.find((user) => user.id === ticket.user_id);
+              return (
+                <article key={ticket.id} className="grid gap-4 py-5 md:grid-cols-[1fr_auto]">
+                  <div className="min-w-0 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="break-words font-medium">{ticket.subject}</h3>
+                      <Badge variant="outline" className="capitalize">
+                        {ticket.category.replaceAll("_", " ")}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {customer?.full_name ?? "Customer"} · {customer?.email ?? ""} ·{" "}
+                      {new Date(ticket.created_at).toLocaleDateString("en-IN", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </p>
+                    <p className="whitespace-pre-wrap break-words text-sm text-muted-foreground">
+                      {ticket.message}
+                    </p>
+                  </div>
+                  <Select
+                    value={ticket.status}
+                    onValueChange={(status) =>
+                      ticketStatusMutation.mutate({
+                        ticketId: ticket.id,
+                        status: status as "open" | "in_progress" | "resolved",
+                      })
+                    }
+                  >
+                    <SelectTrigger className="w-36" aria-label={`Status for ${ticket.subject}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="open">Open</SelectItem>
+                      <SelectItem value="in_progress">In progress</SelectItem>
+                      <SelectItem value="resolved">Resolved</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       <section className="space-y-3">
