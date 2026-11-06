@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { LifeBuoy, Loader2, MessageCircleQuestion, Send } from "lucide-react";
+import { ArrowRight, LifeBuoy, Loader2, MessageCircleQuestion, Send } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,6 +99,12 @@ function SupportPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             Ask a question and keep track of your requests.
           </p>
+          <Link
+            to="/faq"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Browse frequently asked questions <ArrowRight className="size-3.5" aria-hidden />
+          </Link>
         </div>
       </header>
 
