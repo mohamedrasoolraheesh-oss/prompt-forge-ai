@@ -138,6 +138,9 @@ function Landing() {
             <Button asChild variant="ghost" size="sm">
               <Link to="/pricing">Pricing</Link>
             </Button>
+            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+              <Link to="/faq">FAQ</Link>
+            </Button>
             {signedIn ? (
               <Button asChild size="sm">
                 <Link to="/dashboard">
@@ -306,6 +309,9 @@ function Landing() {
           </span>
           <Link to="/pricing" className="underline-offset-4 hover:text-foreground hover:underline">
             Pricing
+          </Link>
+          <Link to="/faq" className="underline-offset-4 hover:text-foreground hover:underline">
+            FAQ
           </Link>
           <span className="ml-auto">© {new Date().getFullYear()} Rebel Prompt AI</span>
         </div>
