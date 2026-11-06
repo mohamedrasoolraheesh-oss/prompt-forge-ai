@@ -1,3 +1,4 @@
 - [x] Add persistent support requests with owner-scoped access and admin-only status updates.
 - [x] Build the signed-in support form and request-history view.
 - [x] Add support navigation and verify desktop, mobile, customer, and admin views.
+- [ ] Add a public FAQ page and connect it to the landing page and support flow.
