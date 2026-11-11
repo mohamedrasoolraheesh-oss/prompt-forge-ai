@@ -2,3 +2,6 @@
 - [x] Build the signed-in support form and request-history view.
 - [x] Add support navigation and verify desktop, mobile, customer, and admin views.
 - [x] Add a public FAQ page and connect it to the landing page and support flow.
+- [x] Add the uploaded Google verification file at the public site root and keep it in the project.
+- [x] Escape customer-provided invoice fields so printable invoices cannot run saved markup.
+- [ ] Complete the remaining launch-readiness audit items from the uploaded checklist.

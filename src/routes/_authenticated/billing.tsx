@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/empty-state";
+import { escapeHtml } from "@/lib/html";
 import { useProfile } from "@/components/layout/app-shell";
 import { myPayments } from "@/lib/payments.functions";
 
@@ -59,7 +60,7 @@ function openInvoice(p: PaymentRow, customer: { name: string; email: string }) {
     year: "numeric",
   });
   w.document.write(`<!doctype html>
-<html><head><meta charset="utf-8"><title>Invoice ${invoiceNumber(p)}</title>
+<html><head><meta charset="utf-8"><title>Invoice ${escapeHtml(invoiceNumber(p))}</title>
 <style>
   body{font-family:system-ui,-apple-system,sans-serif;color:#18181b;margin:0;padding:48px;background:#fff}
   .wrap{max-width:640px;margin:0 auto}
@@ -76,19 +77,19 @@ function openInvoice(p: PaymentRow, customer: { name: string; email: string }) {
   @media print{body{padding:0}}
 </style></head><body><div class="wrap">
   <div class="top">
-    <div><p class="brand">Rebel Prompt AI</p><h1>Invoice ${invoiceNumber(p)}</h1></div>
+    <div><p class="brand">Rebel Prompt AI</p><h1>Invoice ${escapeHtml(invoiceNumber(p))}</h1></div>
     <div class="meta">
-      <p>${date}</p>
-      <p>Status: <span class="paid">${p.status.toUpperCase()}</span></p>
-      ${p.razorpay_payment_id ? `<p>Ref: ${p.razorpay_payment_id}</p>` : ""}
+      <p>${escapeHtml(date)}</p>
+      <p>Status: <span class="paid">${escapeHtml(p.status.toUpperCase())}</span></p>
+      ${p.razorpay_payment_id ? `<p>Ref: ${escapeHtml(p.razorpay_payment_id)}</p>` : ""}
     </div>
   </div>
-  <p style="margin-top:24px;font-size:14px"><strong>Billed to:</strong><br>${customer.name}<br>${customer.email}</p>
+  <p style="margin-top:24px;font-size:14px"><strong>Billed to:</strong><br>${escapeHtml(customer.name)}<br>${escapeHtml(customer.email)}</p>
   <table>
     <thead><tr><th>Description</th><th>Cycle</th><th style="text-align:right">Amount</th></tr></thead>
     <tbody>
-      <tr><td>Rebel Prompt AI — ${p.plan} plan</td><td style="text-transform:capitalize">${p.billing_cycle}</td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
-      <tr class="total"><td>Total</td><td></td><td style="text-align:right">${inr(p.amount_inr)}</td></tr>
+      <tr><td>Rebel Prompt AI — ${escapeHtml(p.plan)} plan</td><td style="text-transform:capitalize">${escapeHtml(p.billing_cycle)}</td><td style="text-align:right">${escapeHtml(inr(p.amount_inr))}</td></tr>
+      <tr class="total"><td>Total</td><td></td><td style="text-align:right">${escapeHtml(inr(p.amount_inr))}</td></tr>
     </tbody>
   </table>
   <p class="foot">Thank you for using Rebel Prompt AI. This is a computer-generated invoice.</p>
