@@ -11,3 +11,4 @@ This is a TanStack Start + Supabase application.
 - Keep support requests behind authenticated server functions and owner-scoped database policies so private tickets stay protected outside the page UI.
 - Keep public FAQs on a dedicated public route linked from the landing page and authenticated support flow, so help is discoverable before ticket submission.
 - Escape customer-controlled text through a shared HTML helper before generating printable invoices, so personal data remains inert in both billing views.
+- Keep search-provider verification files in `public/` with their original filenames and exact contents, so verification works at the required root URL.
